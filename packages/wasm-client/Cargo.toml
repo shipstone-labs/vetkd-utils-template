@@ -5,6 +5,7 @@ authors = ["Andreas Richter <708186+richtera@users.noreply.github.com>"]
 edition = "2018"
 description = "vetkey client library"
 license = "MIT"
+repository = "https://github.com/shipstone-labs/vetkey-utils.git"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
