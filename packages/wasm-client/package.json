@@ -1,0 +1,32 @@
+{
+  "name": "wasm-client",
+  "type": "module",
+  "collaborators": [
+    "Andreas Richter <708186+richtera@users.noreply.github.com>"
+  ],
+  "description": "vetkey client library",
+  "version": "0.1.0",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shipstone-labs/vetkey-utils.git"
+  },
+  "files": [
+    "wasm_client_bg.wasm",
+    "wasm_client.js",
+    "wasm_client_bg.js",
+    "wasm_client.d.ts",
+    "LICENSE_APACHE",
+    "LICENSE_MIT"
+  ],
+  "main": "wasm_client.js",
+  "types": "wasm_client.d.ts",
+  "sideEffects": [
+    "./wasm_client.js",
+    "./snippets/*"
+  ],
+  "devDependencies": {
+    "tsup": "^8.3.5",
+    "typescript": "^5.6.3"
+  }
+}
