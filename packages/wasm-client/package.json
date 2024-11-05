@@ -12,18 +12,18 @@
     "url": "https://github.com/shipstone-labs/vetkey-utils.git"
   },
   "files": [
-    "wasm_client_bg.wasm",
-    "wasm_client.js",
-    "wasm_client_bg.js",
-    "wasm_client.d.ts",
-    "LICENSE_APACHE",
-    "LICENSE_MIT"
+    "pkg/*.wasm",
+    "pkg/*.ts",
+    "pkg/*.mjs",
+    "dist",
+    "LICENSE",
+    "README.md"
   ],
-  "main": "wasm_client.js",
-  "types": "wasm_client.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "sideEffects": [
-    "./wasm_client.js",
-    "./snippets/*"
+    "./pkg/wasm_client.js",
+    "./pkg/snippets/*"
   ],
   "devDependencies": {
     "tsup": "^8.3.5",
