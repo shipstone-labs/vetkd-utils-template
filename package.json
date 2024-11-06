@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "cargo build && cd packages/wasm-client && wasm-pack build --target web && mv pkg/wasm_client.js pkg/wasm_client.mjs && pnpm tsup && pnpm pack",
+    "watch": "cargo watch --why --ignore packages/wasm-client/tsup.config.bundled* --ignore packages/wasm-client/pkg --ignore packages/wasm-client/dist -x 'build' -s 'cd packages/wasm-client && wasm-pack build && mv pkg/wasm_client.js pkg/wasm_client.mjs && pnpm tsup'"
   },
   "keywords": [],
   "author": "",

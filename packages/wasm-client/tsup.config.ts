@@ -7,4 +7,10 @@ export default defineConfig({
 	sourcemap: true, // Enable sourcemaps if needed
 	dts: true, // Generate .d.ts declaration files
 	clean: true, // Clean the output directory before building
+	esbuildOptions: (options) => {
+		options.loader = {
+			...options.loader,
+			".wasm": "file", // Configure the loader for .wasm files
+		};
+	},
 });
