@@ -2,6 +2,7 @@
 [workspace]
 resolver = "2"
 members = [
-    "packages/backend",
+    "packages/vetkd-notes-canister",
+    "packages/vetkd-notes",
     "packages/wasm-client"
 ]

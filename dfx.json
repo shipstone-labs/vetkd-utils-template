@@ -1,0 +1,35 @@
+{
+  "canisters": {
+    "vetkd_system_api": {
+      "candid": "vetkd_system_api.did",
+      "type": "custom",
+      "wasm": "vetkd_system_api.wasm"
+    },
+    "vetkd_notes_canister": {
+      "dependencies": ["vetkd_system_api"],
+      "type": "rust",
+      "candid": "packages/vetkd-notes-canister/src/vetkd_notes_canister.did",
+      "package": "vetkd_notes_canister"
+    },
+    "www": {
+      "dependencies": ["vetkd_notes_canister", "vetkd_system_api"],
+      "frontend": {
+        "entrypoint": "src/frontend/public/index.html"
+      },
+      "source": ["src/frontend/public/"],
+      "type": "assets"
+    },
+    "internet_identity": {
+      "candid": "https://github.com/dfinity/internet-identity/releases/latest/download/internet_identity.did",
+      "type": "custom",
+      "wasm": "https://github.com/dfinity/internet-identity/releases/latest/download/internet_identity_dev.wasm.gz"
+    }
+  },
+  "networks": {
+    "local": {
+      "bind": "0.0.0.0:8000",
+      "type": "ephemeral"
+    }
+  },
+  "version": 1
+}
