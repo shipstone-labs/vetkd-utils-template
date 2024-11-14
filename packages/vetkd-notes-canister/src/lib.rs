@@ -190,7 +190,7 @@ fn get_notes() -> Vec<EncryptedNote> {
         }
 
         // Convert the HashSet into a Vec to return the unique values
-        let mut output: Vec<_> = result.into_iter().map(|(id, doc)| doc).collect();
+        let mut output: Vec<_> = result.values().cloned().collect();
         output.sort_by_key(|note| note.id());
         output
     })
@@ -250,8 +250,6 @@ fn delete_note(note_id: u128) {
 ///     [encrypted_text] exceeds [MAX_NOTE_CHARS]
 #[update]
 fn update_note(id: NoteId, data: String, encrypted_text: String) {
-    let user_str = caller().to_string();
-
     NOTES.with_borrow_mut(|notes| {
         if let Some(mut note_to_update) = notes.get(&id) {
             if !note_to_update.is_authorized() || note_to_update.locked() {
@@ -413,7 +411,6 @@ async fn encrypted_symmetric_key_for_note(
     let user_str = caller().to_string();
     let request = NOTES.with_borrow_mut(|notes| {
         if let Some(mut note) = notes.get(&note_id) {
-            let user_str_clone = &Some(user_str.clone());
             if !note.lock_authorized() {
                 ic_cdk::trap(&format!("unauthorized key request by user {user_str}"));
             }
