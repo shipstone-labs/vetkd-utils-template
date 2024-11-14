@@ -4,6 +4,7 @@ use ic_stable_structures::{storable::Bound, Storable};
 use std::{
     borrow::Cow,
     collections::{HashMap, HashSet},
+    hash::Hash,
 };
 
 #[derive(Clone, Debug, CandidType, Deserialize, Eq, PartialEq, Hash)]
@@ -12,15 +13,39 @@ pub struct PrincipalRule {
     was_read: bool,
 }
 
-pub type PrincipalName = String;
+impl PrincipalRule {
+    pub fn when(&self) -> Option<u64> {
+        self.when
+    }
+    pub fn was_read(&self) -> bool {
+        self.was_read
+    }
+}
+
+pub const EVERYONE: &str = "everyone";
 pub type NoteId = u128;
 
 #[derive(Clone, Debug, CandidType, Deserialize, Eq, PartialEq, Hash)]
 pub struct HistoryEntry {
     action: String,
-    user: Option<String>,
-    rule: Option<(Option<String>, Option<u64>)>,
+    user: String,
+    rule: Option<(String, Option<u64>)>,
     created_at: u64,
+}
+
+impl HistoryEntry {
+    pub fn action(&self) -> String {
+        self.action.clone()
+    }
+    pub fn user(&self) -> String {
+        self.user.clone()
+    }
+    pub fn rule(&self) -> Option<(String, Option<u64>)> {
+        self.rule.clone()
+    }
+    pub fn created_at(&self) -> u64 {
+        self.created_at
+    }
 }
 
 #[derive(Clone, Debug, CandidType, Deserialize, Eq, PartialEq)]
@@ -28,32 +53,99 @@ pub struct EncryptedNote {
     id: NoteId,
     encrypted_text: String,
     data: String,
-    owner: PrincipalName,
+    owner: String,
     /// Principals with whom this note is shared. Does not include the owner.
     /// Needed to be able to efficiently show in the UI with whom this note is shared.
-    users: HashMap<Option<String>, PrincipalRule>,
+    users: HashMap<String, PrincipalRule>,
 
     locked: bool,
-    read_by: HashSet<PrincipalName>,
+    read_by: HashSet<String>,
     created_at: u64,
     updated_at: u64,
     history: Vec<HistoryEntry>,
 }
 
+impl Default for EncryptedNote {
+    fn default() -> Self {
+        EncryptedNote {
+            id: 0,
+            encrypted_text: "".to_string(),
+            data: "".to_string(),
+            owner: "".to_string(),
+            users: HashMap::new(),
+            locked: false,
+            created_at: ic_cdk::api::time(),
+            updated_at: ic_cdk::api::time(),
+            history: vec![],
+            read_by: HashSet::new(),
+        }
+    }
+}
+
 impl EncryptedNote {
+    pub fn create(id: NoteId) -> Self {
+        let user = &caller().to_text();
+        EncryptedNote {
+            id,
+            owner: user.clone(),
+            data: String::new(),
+            users: HashMap::new(),
+            encrypted_text: String::new(),
+            locked: false,
+            read_by: HashSet::new(),
+            created_at: ic_cdk::api::time(),
+            updated_at: ic_cdk::api::time(),
+            history: vec![HistoryEntry {
+                action: "created".to_string(),
+                user: user.clone(),
+                rule: None,
+                created_at: ic_cdk::api::time(),
+            }],
+        }
+    }
+    pub fn id(&self) -> NoteId {
+        self.id
+    }
+    pub fn data(&self) -> String {
+        self.data.clone()
+    }
+    pub fn read_by(&self) -> HashSet<String> {
+        self.read_by.clone()
+    }
+    pub fn encrypted_text(&self) -> String {
+        self.encrypted_text.clone()
+    }
+    pub fn owner(&self) -> String {
+        self.owner.clone()
+    }
+    pub fn users(&self) -> HashMap<String, PrincipalRule> {
+        self.users.clone()
+    }
+    pub fn locked(&self) -> bool {
+        self.locked
+    }
+    pub fn created_at(&self) -> u64 {
+        self.created_at
+    }
+    pub fn updated_at(&self) -> u64 {
+        self.updated_at
+    }
+    pub fn history(&self) -> Vec<HistoryEntry> {
+        self.history.clone()
+    }
     // Check if the user is owner or has access to the note as of right now
-    pub fn is_authorized(&self, user: &PrincipalName) -> bool {
+    pub fn is_authorized(&self) -> bool {
+        let user = &caller().to_text();
         if user == &self.owner {
             return true;
         }
         // once a non-owner reads a note it's locked and can no longer
         // be updated
-        let check = &Some(user.to_string());
-        if let Some(r) = self.users.get(check) {
+        if let Some(r) = self.users.get(user) {
             if r.when.is_none() || r.when.unwrap() <= ic_cdk::api::time() {
                 return true;
             }
-        } else if let Some(r) = self.users.get(&None) {
+        } else if let Some(r) = self.users.get(EVERYONE) {
             if r.when.is_none() || r.when.unwrap() <= ic_cdk::api::time() {
                 return true;
             }
@@ -68,8 +160,7 @@ impl EncryptedNote {
         }
         // once a non-owner reads a note it's locked and can no longer
         // be updated
-        let check = &Some(user.to_string());
-        if let Some(r) = self.users.get_mut(check) {
+        if let Some(r) = self.users.get_mut(user) {
             if r.when.is_none() || r.when.unwrap() <= ic_cdk::api::time() {
                 r.was_read = true;
                 self.history.append(&mut vec![HistoryEntry {
@@ -78,15 +169,15 @@ impl EncryptedNote {
                     } else {
                         "read-locked".to_string()
                     },
-                    user: Some(user.to_string()),
-                    rule: Some((check.clone(), r.when)),
+                    user: user.to_string(),
+                    rule: Some((user.clone(), r.when)),
                     created_at: ic_cdk::api::time(),
                 }]);
                 self.locked = true;
                 self.read_by.insert(user.to_string());
                 return true;
             }
-        } else if let Some(r) = self.users.get_mut(&None) {
+        } else if let Some(r) = self.users.get_mut(EVERYONE) {
             if r.when.is_none() || r.when.unwrap() <= ic_cdk::api::time() {
                 r.was_read = true;
                 self.read_by.insert(user.to_string());
@@ -96,8 +187,8 @@ impl EncryptedNote {
                     } else {
                         "read-locked".to_string()
                     },
-                    user: Some(user.to_string()),
-                    rule: Some((None, r.when)),
+                    user: user.to_string(),
+                    rule: Some((EVERYONE.to_string(), r.when)),
                     created_at: ic_cdk::api::time(),
                 }]);
                 self.locked = true;
@@ -107,19 +198,20 @@ impl EncryptedNote {
         false
     }
     // add a new reader to the note
-    pub fn add_reader(&mut self, user: Option<String>, when: Option<u64>) -> bool {
+    pub fn add_reader(&mut self, user: &Option<String>, when: Option<u64>) -> bool {
         if self.locked && (user.is_none() || self.read_by.contains(&user.clone().unwrap())) {
             // If this note is locked and the user has already read it then this doesn't seem useful.
             return false;
         }
+        let user_name = user.clone().unwrap_or_else(|| EVERYONE.to_string());
         self.history.append(&mut vec![HistoryEntry {
             action: "share".to_string(),
-            user: user.clone(),
-            rule: Some((user.clone(), when)),
+            user: user_name.clone(),
+            rule: Some((user_name.clone(), when)),
             created_at: ic_cdk::api::time(),
         }]);
         self.users.insert(
-            user.clone(),
+            user_name,
             PrincipalRule {
                 was_read: false,
                 when,
@@ -128,22 +220,33 @@ impl EncryptedNote {
         true
     }
     // Was the note ever read by that user
-    pub fn user_read(&self, user: &PrincipalName) -> bool {
+    pub fn user_read(&self, user: &String) -> bool {
         self.read_by.contains(user)
     }
     // Remove a reader (will return false if the note was already read by the user)
-    pub fn remove_reader(&mut self, user: &Option<PrincipalName>) -> bool {
+    pub fn remove_reader(&mut self, user: &Option<String>) -> bool {
         if self.locked {
             if user.iter().any(|u| self.read_by.contains(u)) {
                 return false;
-            } else if let Some(r) = self.users.get(user) {
+            } else if let Some(r) = self
+                .users
+                .get(&user.clone().unwrap_or(EVERYONE.to_string()))
+            {
                 if r.was_read {
                     return false;
                 }
             }
         }
-        if self.users.contains_key(user) {
-            self.users.remove(user);
+        let user_name = user.clone().unwrap_or_else(|| EVERYONE.to_string());
+        if self.users.contains_key(&user_name) {
+            self.users.remove(user_name.as_str());
+            self.history.push(HistoryEntry {
+                action: "unshared".to_string(),
+                user: user_name.clone(),
+                rule: None,
+                created_at: ic_cdk::api::time(),
+            });
+
             true
         } else {
             false
@@ -151,10 +254,49 @@ impl EncryptedNote {
     }
     // Update the data. This is only allowed by the owner before the note was locked
     pub fn set_data(&mut self, data: String) -> bool {
-        if self.locked && caller().to_text() != self.owner {
+        let user = caller().to_text();
+        if self.locked && user != self.owner {
             return false;
         }
         self.data = data;
+        self.updated_at = ic_cdk::api::time();
+        self.history.push(HistoryEntry {
+            action: "updated".to_string(),
+            user: user.clone(),
+            rule: None,
+            created_at: ic_cdk::api::time(),
+        });
+        true
+    }
+    pub fn set_encrypted_text(&mut self, encrypted_text: String) -> bool {
+        let user = caller().to_text();
+        if self.locked && user != self.owner {
+            return false;
+        }
+        self.encrypted_text = encrypted_text;
+        self.updated_at = ic_cdk::api::time();
+        self.history.push(HistoryEntry {
+            action: "updated".to_string(),
+            user: user.clone(),
+            rule: None,
+            created_at: ic_cdk::api::time(),
+        });
+        true
+    }
+    pub fn set_data_and_encrypted_text(&mut self, data: String, encrypted_text: String) -> bool {
+        let user = caller().to_text();
+        if self.locked && user != self.owner {
+            return false;
+        }
+        self.data = data;
+        self.encrypted_text = encrypted_text;
+        self.updated_at = ic_cdk::api::time();
+        self.history.push(HistoryEntry {
+            action: "updated".to_string(),
+            user: user.clone(),
+            rule: None,
+            created_at: ic_cdk::api::time(),
+        });
         true
     }
     // Is the note shared at all?
@@ -168,27 +310,6 @@ impl EncryptedNote {
 }
 
 impl Storable for EncryptedNote {
-    fn to_bytes(&self) -> Cow<[u8]> {
-        Cow::Owned(Encode!(self).unwrap())
-    }
-    fn from_bytes(bytes: Cow<[u8]>) -> Self {
-        Decode!(bytes.as_ref(), Self).unwrap()
-    }
-    const BOUND: Bound = Bound::Unbounded;
-}
-
-#[derive(CandidType, Deserialize, Default)]
-pub struct NoteIds {
-    ids: Vec<NoteId>,
-}
-
-impl NoteIds {
-    pub fn iter(&self) -> impl std::iter::Iterator<Item = &NoteId> {
-        self.ids.iter()
-    }
-}
-
-impl Storable for NoteIds {
     fn to_bytes(&self) -> Cow<[u8]> {
         Cow::Owned(Encode!(self).unwrap())
     }
@@ -242,7 +363,7 @@ async fn symmetric_key_verification_key_for_note() -> String {
 
 pub async fn encrypted_symmetric_key_for_note(
     note_id: NoteId,
-    owner: &PrincipalName,
+    owner: &String,
     encryption_public_key: Vec<u8>,
 ) -> String {
     let request = VetKDEncryptedKeyRequest {

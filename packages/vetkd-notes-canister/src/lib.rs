@@ -1,5 +1,4 @@
 use candid::{CandidType, Decode, Deserialize, Encode, Principal};
-use ic_cdk::api::time;
 use ic_cdk_macros::*;
 use ic_stable_structures::memory_manager::{MemoryId, MemoryManager, VirtualMemory};
 use ic_stable_structures::{
@@ -7,79 +6,10 @@ use ic_stable_structures::{
 };
 use std::borrow::Cow;
 use std::cell::RefCell;
-use std::collections::HashSet;
-use std::hash::Hash;
+use std::collections::HashMap;
+use vetkd_notes::{EncryptedNote, NoteId, EVERYONE};
 
-#[derive(Clone, Debug, CandidType, Deserialize, Eq, PartialEq, Hash)]
-struct PrincipalEntry {
-    name: Option<String>,
-    when: Option<u64>,
-}
-
-type PrincipalName = String;
 type Memory = VirtualMemory<DefaultMemoryImpl>;
-type NoteId = u128;
-
-#[derive(Clone, Debug, CandidType, Deserialize, Eq, PartialEq, Hash)]
-pub struct HistoryEntry {
-    action: String,
-    user: Option<String>,
-    when: Option<u64>,
-    created_at: u64,
-}
-
-#[derive(Clone, Debug, CandidType, Deserialize, Eq, PartialEq, Hash)]
-pub struct EncryptedNote {
-    id: NoteId,
-    encrypted_text: String,
-    data: String,
-    owner: PrincipalName,
-    /// Principals with whom this note is shared. Does not include the owner.
-    /// Needed to be able to efficiently show in the UI with whom this note is shared.
-    users: Vec<PrincipalEntry>,
-
-    locked: bool,
-    created_at: u64,
-    updated_at: u64,
-    history: Vec<HistoryEntry>,
-}
-
-impl Default for EncryptedNote {
-    fn default() -> Self {
-        EncryptedNote {
-            id: 0,
-            encrypted_text: "".to_string(),
-            data: "".to_string(),
-            owner: "".to_string(),
-            users: vec![],
-            locked: false,
-            created_at: time(),
-            updated_at: time(),
-            history: vec![],
-        }
-    }
-}
-
-impl EncryptedNote {
-    pub fn is_authorized(&self, user: &PrincipalName) -> bool {
-        user == &self.owner
-            || self.users.iter().any(|u| {
-                let name = u.name.clone();
-                (name.is_none() || &name.unwrap() == user)
-                    && (u.when.is_none() || u.when.unwrap() <= ic_cdk::api::time())
-            })
-    }
-}
-
-impl Storable for EncryptedNote {
-    fn to_bytes(&self) -> Cow<[u8]> {
-        Cow::Owned(Encode!(self).unwrap())
-    }
-    fn from_bytes(bytes: Cow<[u8]>) -> Self {
-        Decode!(bytes.as_ref(), Self).unwrap()
-    }
-    const BOUND: Bound = Bound::Unbounded;
-}
 
 #[derive(CandidType, Deserialize, Default)]
 pub struct NoteIds {
@@ -130,13 +60,13 @@ thread_local! {
         )
     );
 
-    static NOTE_OWNERS: RefCell<StableBTreeMap<PrincipalName, NoteIds, Memory>> = RefCell::new(
+    static NOTE_OWNERS: RefCell<StableBTreeMap<String, NoteIds, Memory>> = RefCell::new(
         StableBTreeMap::init(
             MEMORY_MANAGER.with_borrow(|m| m.get(MemoryId::new(2))),
         )
     );
 
-    static NOTE_SHARES: RefCell<StableBTreeMap<PrincipalName, NoteIds, Memory>> = RefCell::new(
+    static NOTE_SHARES: RefCell<StableBTreeMap<String, NoteIds, Memory>> = RefCell::new(
         StableBTreeMap::init(
             MEMORY_MANAGER.with_borrow(|m| m.get(MemoryId::new(3))),
         )
@@ -191,14 +121,14 @@ fn whoami() -> String {
 fn get_notes() -> Vec<EncryptedNote> {
     let user_str = caller().to_string();
     NOTES.with_borrow(|notes| {
-        let mut result = HashSet::<EncryptedNote>::new();
+        let mut result = HashMap::<NoteId, EncryptedNote>::new();
         let owned = NOTE_OWNERS.with_borrow(|ids| {
             ids.get(&user_str)
                 .unwrap_or_default()
                 .iter()
                 .map(|id| notes.get(id).ok_or(format!("missing note with ID {id}")))
                 .collect::<Result<Vec<_>, _>>()
-                .unwrap_or_else(|err| ic_cdk::trap(&err))
+                .unwrap_or_else(|err: String| ic_cdk::trap(&err))
         });
         let shared = NOTE_SHARES.with_borrow(|ids| {
             ids.get(&user_str)
@@ -207,15 +137,16 @@ fn get_notes() -> Vec<EncryptedNote> {
                 .map(|id| notes.get(id).ok_or(format!("missing note with ID {id}")))
                 .filter(|note| {
                     if let Ok(item) = note {
-                        if owned.clone().iter().any(|u| u.id == item.id) {
+                        if owned.clone().iter().any(|u| u.id() == item.id()) {
                             return false;
                         }
-                        item.users.iter().any(|u| {
-                            if let Some(name) = &u.name {
-                                name == &user_str
-                                    && (u.when.is_none() || u.when.unwrap() <= ic_cdk::api::time())
+                        item.users().iter().any(|(u, r)| {
+                            if EVERYONE != u {
+                                u == &user_str
+                                    && (r.when().is_none()
+                                        || r.when().unwrap() <= ic_cdk::api::time())
                             } else {
-                                u.when.is_none() || u.when.unwrap() <= ic_cdk::api::time()
+                                r.when().is_none() || r.when().unwrap() <= ic_cdk::api::time()
                             }
                         })
                     } else {
@@ -223,7 +154,7 @@ fn get_notes() -> Vec<EncryptedNote> {
                     }
                 })
                 .collect::<Result<Vec<_>, _>>()
-                .unwrap_or_else(|err| ic_cdk::trap(&err))
+                .unwrap_or_else(|err: String| ic_cdk::trap(&err))
         });
         let public = NOTE_SHARES.with_borrow(|ids| {
             ids.get(&"everybody".to_string())
@@ -232,17 +163,18 @@ fn get_notes() -> Vec<EncryptedNote> {
                 .map(|id| notes.get(id).ok_or(format!("missing note with ID {id}")))
                 .filter(|note| {
                     if let Ok(item) = note {
-                        if owned.clone().iter().any(|u| u.id == item.id)
-                            || shared.clone().iter().any(|u| u.id == item.id)
+                        if owned.clone().iter().any(|u| u.id() == item.id())
+                            || shared.clone().iter().any(|u| u.id() == item.id())
                         {
                             return false;
                         }
-                        item.users.iter().any(|u| {
-                            if let Some(name) = &u.name {
-                                name == &user_str
-                                    && (u.when.is_none() || u.when.unwrap() <= ic_cdk::api::time())
+                        item.users().iter().any(|(u, r)| {
+                            if EVERYONE != u {
+                                u == &user_str
+                                    && (r.when().is_none()
+                                        || r.when().unwrap() <= ic_cdk::api::time())
                             } else {
-                                u.when.is_none() || u.when.unwrap() <= ic_cdk::api::time()
+                                r.when().is_none() || r.when().unwrap() <= ic_cdk::api::time()
                             }
                         })
                     } else {
@@ -250,16 +182,16 @@ fn get_notes() -> Vec<EncryptedNote> {
                     }
                 })
                 .collect::<Result<Vec<_>, _>>()
-                .unwrap_or_else(|err| ic_cdk::trap(&err))
+                .unwrap_or_else(|err: String| ic_cdk::trap(&err))
         });
         // Use `extend` to add the notes to the `HashSet`
-        result.extend(owned); // Convert Vec into iterator and extend the HashSet
-        result.extend(shared);
-        result.extend(public);
+        for note in owned.iter().chain(shared.iter()).chain(public.iter()) {
+            result.entry(note.id()).or_insert(note.clone());
+        }
 
         // Convert the HashSet into a Vec to return the unique values
-        let mut output: Vec<_> = result.into_iter().collect();
-        output.sort_by_key(|note| note.id);
+        let mut output: Vec<_> = result.into_iter().map(|(id, doc)| doc).collect();
+        output.sort_by_key(|note| note.id());
         output
     })
 }
@@ -278,8 +210,8 @@ fn delete_note(note_id: u128) {
     let user_str = caller().to_string();
     NOTES.with_borrow_mut(|notes| {
         if let Some(note_to_delete) = notes.get(&note_id) {
-            let owner = &note_to_delete.owner;
-            if owner != &user_str || note_to_delete.locked {
+            let owner = &note_to_delete.owner();
+            if owner != &user_str || note_to_delete.locked() {
                 ic_cdk::trap("only the owner can delete unlocked notes");
             }
             NOTE_OWNERS.with_borrow_mut(|owner_to_nids| {
@@ -293,8 +225,8 @@ fn delete_note(note_id: u128) {
                 }
             });
             NOTE_SHARES.with_borrow_mut(|share_to_nids| {
-                for share in note_to_delete.users {
-                    let share_key = share.name.unwrap_or_else(|| "everybody".to_string());
+                for (share_name, _) in note_to_delete.users() {
+                    let share_key = share_name.to_string();
                     if let Some(mut share_ids) = share_to_nids.get(&share_key) {
                         share_ids.ids.retain(|&id| id != note_id);
                         if !share_ids.ids.is_empty() {
@@ -322,19 +254,11 @@ fn update_note(id: NoteId, data: String, encrypted_text: String) {
 
     NOTES.with_borrow_mut(|notes| {
         if let Some(mut note_to_update) = notes.get(&id) {
-            if !note_to_update.is_authorized(&user_str) || note_to_update.locked {
+            if !note_to_update.is_authorized() || note_to_update.locked() {
                 ic_cdk::trap("unauthorized update");
             }
             assert!(encrypted_text.chars().count() <= MAX_NOTE_CHARS);
-            note_to_update.encrypted_text = encrypted_text;
-            note_to_update.data = data;
-            note_to_update.updated_at = ic_cdk::api::time();
-            note_to_update.history.push(HistoryEntry {
-                action: "updated".to_string(),
-                user: Some(user_str),
-                when: None,
-                created_at: ic_cdk::api::time(),
-            });
+            note_to_update.set_data_and_encrypted_text(data, encrypted_text);
 
             notes.insert(id, note_to_update);
         }
@@ -356,37 +280,22 @@ fn create_note() -> NoteId {
     NOTES.with_borrow_mut(|id_to_note| {
         NOTE_OWNERS.with_borrow_mut(|owner_to_nids| {
             let next_note_id = NEXT_NOTE_ID.with_borrow(|id| *id.get());
-            let new_note = EncryptedNote {
-                id: next_note_id,
-                owner: owner.clone(),
-                data: String::new(),
-                users: vec![],
-                encrypted_text: String::new(),
-                locked: false,
-                created_at: time(),
-                updated_at: time(),
-                history: vec![HistoryEntry {
-                    action: "created".to_string(),
-                    user: Some(owner.clone()),
-                    when: None,
-                    created_at: ic_cdk::api::time(),
-                }],
-            };
+            let new_note = EncryptedNote::create(next_note_id);
 
             if let Some(mut owner_nids) = owner_to_nids.get(&owner) {
                 assert!(owner_nids.ids.len() < MAX_NOTES_PER_USER);
-                owner_nids.ids.push(new_note.id);
+                owner_nids.ids.push(new_note.id());
                 owner_to_nids.insert(owner, owner_nids);
             } else {
                 assert!(owner_to_nids.len() < MAX_USERS);
                 owner_to_nids.insert(
                     owner,
                     NoteIds {
-                        ids: vec![new_note.id],
+                        ids: vec![new_note.id()],
                     },
                 );
             }
-            assert_eq!(id_to_note.insert(new_note.id, new_note), None);
+            assert_eq!(id_to_note.insert(new_note.id(), new_note), None);
 
             NEXT_NOTE_ID.with_borrow_mut(|next_note_id| {
                 next_note_id
@@ -405,41 +314,20 @@ fn create_note() -> NoteId {
 ///      [caller] is the anonymous identity
 ///      [caller] is not the owner of note with id `note_id`
 #[update]
-fn add_user(note_id: NoteId, user: PrincipalEntry) {
+fn add_user(note_id: NoteId, user: Option<String>, when: Option<u64>) {
     let caller_str = caller().to_string();
     NOTES.with_borrow_mut(|notes| {
         NOTE_SHARES.with_borrow_mut(|user_to_nids| {
             if let Some(mut note) = notes.get(&note_id) {
-                let owner = &note.owner;
+                let owner = &note.owner();
                 if owner != &caller_str {
                     ic_cdk::trap("only the owner can share the note");
                 }
-                assert!(note.users.len() < MAX_SHARES_PER_NOTE);
-
-                if !note.locked {
-                    note.locked = true;
-                    note.history.push(HistoryEntry {
-                        action: "locked".to_string(),
-                        user: None,
-                        when: None,
-                        created_at: ic_cdk::api::time(),
-                    });
-                }
-                note.history.push(HistoryEntry {
-                    action: "shared".to_string(),
-                    user: user.name.clone(),
-                    when: user.when,
-                    created_at: ic_cdk::api::time(),
-                });
-                if let Some(entry) = note.users.iter().position(|u| u.clone().name == user.name) {
-                    let entry_item = note.users.get_mut(entry).unwrap();
-                    entry_item.when = user.when;
-                }
-                if !note.users.contains(&user) {
-                    note.users.push(user.clone());
+                assert!(note.users().len() < MAX_SHARES_PER_NOTE);
+                if note.add_reader(&user, when) {
                     notes.insert(note_id, note);
                 }
-                let user_name = user.name.unwrap_or_else(|| "everybody".to_string());
+                let user_name = user.unwrap_or_else(|| "everybody".to_string());
                 if let Some(mut user_ids) = user_to_nids.get(&user_name) {
                     if !user_ids.ids.contains(&note_id) {
                         user_ids.ids.push(note_id);
@@ -460,33 +348,29 @@ fn add_user(note_id: NoteId, user: PrincipalEntry) {
 ///      [caller] is the anonymous identity
 ///      [caller] is not the owner of note with id `note_id`
 #[update]
-fn remove_user(note_id: NoteId, user: Option<PrincipalName>) {
+fn remove_user(note_id: NoteId, user: Option<String>) {
     let caller_str = caller().to_string();
     NOTES.with_borrow_mut(|notes| {
         NOTE_SHARES.with_borrow_mut(|user_to_nids| {
             if let Some(mut note) = notes.get(&note_id) {
-                let owner = &note.owner;
+                let owner = &note.owner();
                 if owner != &caller_str {
                     ic_cdk::trap("only the owner can share the note");
                 }
+                if note.remove_reader(&user) {
+                    notes.insert(note_id, note);
 
-                note.users.retain(|u| u.name != user);
-                note.history.push(HistoryEntry {
-                    action: "unshared".to_string(),
-                    user: user.clone(),
-                    when: None,
-                    created_at: ic_cdk::api::time(),
-                });
-                notes.insert(note_id, note);
-
-                let user_name = user.unwrap_or_else(|| "everybody".to_string());
-                if let Some(mut user_ids) = user_to_nids.get(&user_name) {
-                    user_ids.ids.retain(|&id| id != note_id);
-                    if !user_ids.ids.is_empty() {
-                        user_to_nids.insert(user_name, user_ids);
-                    } else {
-                        user_to_nids.remove(&user_name);
+                    let user_name = user.unwrap_or_else(|| "everybody".to_string());
+                    if let Some(mut user_ids) = user_to_nids.get(&user_name) {
+                        user_ids.ids.retain(|&id| id != note_id);
+                        if !user_ids.ids.is_empty() {
+                            user_to_nids.insert(user_name, user_ids);
+                        } else {
+                            user_to_nids.remove(&user_name);
+                        }
                     }
+                } else {
+                    notes.insert(note_id, note);
                 }
             }
         })
@@ -529,27 +413,15 @@ async fn encrypted_symmetric_key_for_note(
     let user_str = caller().to_string();
     let request = NOTES.with_borrow_mut(|notes| {
         if let Some(mut note) = notes.get(&note_id) {
-            if !note.is_authorized(&user_str) {
-                ic_cdk::trap(&format!("unauthorized key request by user {user_str}"));
-            }
             let user_str_clone = &Some(user_str.clone());
-            if !note
-                .history
-                .iter()
-                .any(|entry| entry.action == "read" && &entry.user == user_str_clone)
-            {
-                note.history.push(HistoryEntry {
-                    action: "read".to_string(),
-                    user: Some(user_str.clone()),
-                    when: None,
-                    created_at: ic_cdk::api::time(),
-                });
+            if !note.lock_authorized() {
+                ic_cdk::trap(&format!("unauthorized key request by user {user_str}"));
             }
             VetKDEncryptedKeyRequest {
                 derivation_id: {
                     let mut buf = vec![];
                     buf.extend_from_slice(&note_id.to_be_bytes()); // fixed-size encoding
-                    buf.extend_from_slice(note.owner.as_bytes());
+                    buf.extend_from_slice(note.owner().as_bytes());
                     buf // prefix-free
                 },
                 public_key_derivation_path: vec![b"note_symmetric_key".to_vec()],

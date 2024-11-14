@@ -36,22 +36,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ace50bade8e6234aa140d9a2f552bbee1db4d353f69b8217bc503490fc1a9f26"
 
 [[package]]
-name = "backend"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "candid",
- "hex",
- "ic-cdk",
- "ic-cdk-macros",
- "ic-stable-structures",
- "ic-types",
- "lazy_static",
- "serde",
- "serde_json",
-]
-
-[[package]]
 name = "binread"
 version = "2.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -727,6 +711,22 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0b928f33d975fc6ad9f86c8f283853ad26bdd5b10b7f1542aa2fa15e2289105a"
 
 [[package]]
+name = "vetkd_notes"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "candid",
+ "hex",
+ "ic-cdk",
+ "ic-cdk-macros",
+ "ic-stable-structures",
+ "ic-types",
+ "lazy_static",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
 name = "vetkd_notes_canister"
 version = "0.1.0"
 dependencies = [
@@ -741,6 +741,7 @@ dependencies = [
  "lazy_static",
  "serde",
  "serde_json",
+ "vetkd_notes",
 ]
 
 [[package]]
