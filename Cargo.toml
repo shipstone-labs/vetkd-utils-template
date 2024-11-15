@@ -4,5 +4,5 @@ resolver = "2"
 members = [
     "packages/vetkd-notes-canister",
     "packages/vetkd-notes",
-    "packages/wasm-client"
+    "packages/vetkd-notes-client"
 ]

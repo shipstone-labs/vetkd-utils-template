@@ -1,5 +1,5 @@
 {
-  "name": "wasm-client",
+  "name": "@shipstone-labs/vetkd-notes-client",
   "type": "module",
   "collaborators": [
     "Andreas Richter <708186+richtera@users.noreply.github.com>"
