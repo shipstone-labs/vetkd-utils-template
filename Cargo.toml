@@ -7,6 +7,30 @@ members = [
     "packages/vetkd-notes-client"
 ]
 
+[workspace.package]
+  edition = "2021"
+  authors = ["richtera"]
+  description = "vetkd utils"
+  documentation = "Utilities to use vetkd to store encrypted notes"
+
 [profile.release]
 # Tell `rustc` to optimize for small code size.
 opt-level = "s"
+
+[workspace.dependencies]
+hex = { version = "0.4.3", features = ["serde"] }
+ic_bls12_381 = { version = "0.10.0", default-features = false, features = [
+    "groups",
+    "pairings",
+    "alloc",
+    "experimental",
+    "zeroize",
+] }
+lazy_static = "1.4.0"
+pairing = "0.23"
+sha2 = "0.10.8"
+sha3 = "0.10.8"
+subtle = "2.6.1"
+rand = { version = "0.8.5", features = ["small_rng"] }
+rand_chacha = "0.3.1"
+zeroize = { version = "1.8.1", features = ["zeroize_derive"] }

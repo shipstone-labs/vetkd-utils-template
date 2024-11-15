@@ -29,6 +29,7 @@ pub struct HistoryEntry {
     action: String,
     user: String,
     rule: Option<(String, Option<u64>)>,
+    labels: Vec<String>,
     created_at: u64,
 }
 
@@ -44,6 +45,9 @@ impl HistoryEntry {
     }
     pub fn created_at(&self) -> u64 {
         self.created_at
+    }
+    pub fn labels(&self) -> Vec<String> {
+        self.labels.clone()
     }
 }
 
@@ -96,6 +100,7 @@ impl EncryptedNote {
             updated_at: ic_cdk::api::time(),
             history: vec![HistoryEntry {
                 action: "created".to_string(),
+                labels: vec![],
                 user: user.clone(),
                 rule: None,
                 created_at: ic_cdk::api::time(),
@@ -163,12 +168,13 @@ impl EncryptedNote {
             if r.when.is_none() || r.when.unwrap() <= ic_cdk::api::time() {
                 r.was_read = true;
                 self.history.append(&mut vec![HistoryEntry {
-                    action: if self.locked {
-                        "read".to_string()
-                    } else {
-                        "read-locked".to_string()
-                    },
+                    action: "read".to_string(),
                     user: user.to_string(),
+                    labels: if self.locked {
+                        vec![]
+                    } else {
+                        vec!["locked".to_string()]
+                    },
                     rule: Some((user.clone(), r.when)),
                     created_at: ic_cdk::api::time(),
                 }]);
@@ -181,12 +187,13 @@ impl EncryptedNote {
                 r.was_read = true;
                 self.read_by.insert(user.to_string());
                 self.history.append(&mut vec![HistoryEntry {
-                    action: if self.locked {
-                        "read".to_string()
-                    } else {
-                        "read-locked".to_string()
-                    },
+                    action: "read".to_string(),
                     user: user.to_string(),
+                    labels: if self.locked {
+                        vec![]
+                    } else {
+                        vec!["locked".to_string()]
+                    },
                     rule: Some((EVERYONE.to_string(), r.when)),
                     created_at: ic_cdk::api::time(),
                 }]);
@@ -205,6 +212,7 @@ impl EncryptedNote {
         let user_name = user.clone().unwrap_or_else(|| EVERYONE.to_string());
         self.history.append(&mut vec![HistoryEntry {
             action: "share".to_string(),
+            labels: vec![],
             user: user_name.clone(),
             rule: Some((user_name.clone(), when)),
             created_at: ic_cdk::api::time(),
@@ -241,6 +249,7 @@ impl EncryptedNote {
             self.users.remove(user_name.as_str());
             self.history.push(HistoryEntry {
                 action: "unshared".to_string(),
+                labels: vec![],
                 user: user_name.clone(),
                 rule: None,
                 created_at: ic_cdk::api::time(),
@@ -261,6 +270,7 @@ impl EncryptedNote {
         self.updated_at = ic_cdk::api::time();
         self.history.push(HistoryEntry {
             action: "updated".to_string(),
+            labels: vec!["data".to_string()],
             user: user.clone(),
             rule: None,
             created_at: ic_cdk::api::time(),
@@ -276,6 +286,7 @@ impl EncryptedNote {
         self.updated_at = ic_cdk::api::time();
         self.history.push(HistoryEntry {
             action: "updated".to_string(),
+            labels: vec!["encrypted_text".to_string()],
             user: user.clone(),
             rule: None,
             created_at: ic_cdk::api::time(),
@@ -292,6 +303,7 @@ impl EncryptedNote {
         self.updated_at = ic_cdk::api::time();
         self.history.push(HistoryEntry {
             action: "updated".to_string(),
+            labels: vec!["data".to_string(), "encrypted_text".to_string()],
             user: user.clone(),
             rule: None,
             created_at: ic_cdk::api::time(),

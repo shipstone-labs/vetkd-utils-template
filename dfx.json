@@ -5,14 +5,14 @@
       "type": "custom",
       "wasm": "vetkd_system_api.wasm"
     },
-    "vetkd_notes_canister": {
+    "vetkd-notes-canister": {
       "dependencies": ["vetkd_system_api"],
       "type": "rust",
-      "candid": "packages/vetkd-notes-canister/src/vetkd_notes_canister.did",
-      "package": "vetkd_notes_canister"
+      "candid": "packages/vetkd-notes-canister/src/vetkd-notes-canister.did",
+      "package": "vetkd-notes-canister"
     },
     "www": {
-      "dependencies": ["vetkd_notes_canister", "vetkd_system_api"],
+      "dependencies": ["vetkd-notes-canister", "vetkd_system_api"],
       "frontend": {
         "entrypoint": "src/frontend/public/index.html"
       },
