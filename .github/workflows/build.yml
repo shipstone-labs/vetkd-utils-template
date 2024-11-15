@@ -18,7 +18,9 @@ jobs:
             components: rustfmt, clippy
 
       - name: Install wasm-pack
-        run: cargo install wasm-pack
+        run: |
+          sudo apt-get install build-essential
+          cargo install wasm-pack
 
       - name: 🏗️ Setup pnpm
         uses: pnpm/action-setup@v4
