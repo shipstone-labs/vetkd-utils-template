@@ -6,3 +6,7 @@ members = [
     "packages/vetkd-notes",
     "packages/vetkd-notes-client"
 ]
+
+[profile.release]
+# Tell `rustc` to optimize for small code size.
+opt-level = "s"

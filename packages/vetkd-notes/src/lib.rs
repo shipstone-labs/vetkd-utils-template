@@ -1,5 +1,4 @@
 use candid::{CandidType, Decode, Deserialize, Encode, Principal};
-use ic_cdk_macros::*;
 use ic_stable_structures::{storable::Bound, Storable};
 use std::{
     borrow::Cow,
@@ -342,8 +341,7 @@ use vetkd_types::{
     VetKDPublicKeyReply, VetKDPublicKeyRequest,
 };
 
-#[update]
-async fn symmetric_key_verification_key_for_note() -> String {
+pub async fn symmetric_key_verification_key_for_note() -> String {
     let request = VetKDPublicKeyRequest {
         canister_id: None,
         derivation_path: vec![b"note_symmetric_key".to_vec()],
