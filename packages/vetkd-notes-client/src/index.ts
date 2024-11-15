@@ -1,1 +1,1 @@
-export * from "../pkg/vetkd_notes_client.mjs";
+export * from "./vetkd_notes_client.mjs";

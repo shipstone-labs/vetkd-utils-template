@@ -17,7 +17,10 @@ fi
 cargo build $RELEASE
 cd packages/vetkd-notes-client
 wasm-pack build --target web $RELEASE
+rm pkg/README.md pkg/.gitignore pkg/LICENSE pkg/package.json
 mv pkg/vetkd_notes_client.js pkg/vetkd_notes_client.mjs
+mv pkg/* src
+rm -rf pkg
 pnpm tsup
 pnpm pack
 cd -
