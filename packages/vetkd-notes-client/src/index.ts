@@ -1,1 +1,1 @@
-export * from "../pkg/wasm_client.mjs";
+export * from "../pkg/vetkd_notes_client.mjs";

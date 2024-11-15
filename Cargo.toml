@@ -12,6 +12,8 @@ members = [
   authors = ["richtera"]
   description = "vetkd utils"
   documentation = "Utilities to use vetkd to store encrypted notes"
+  repository = "https://github.com/shipstone-labs/vetkd-utils"
+  license = "MIT"
 
 [profile.release]
 # Tell `rustc` to optimize for small code size.

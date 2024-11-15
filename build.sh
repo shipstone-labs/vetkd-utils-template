@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
 RELEASE=""
+if [[ "$1" == "clean" ]]
+then
+  rm -rf \
+    packages/vetkd-notes-client/pkg \
+    packages/vetkd-notes-client/dist \
+    packages/vetkd-notes-client/node_modules \
+    packages/vetkd-notes-canister/pkg \
+    target
+  exit 0
+fi
 if [[ "$1" == "release" ]]
 then
   RELEASE="--release"
@@ -7,7 +17,7 @@ fi
 cargo build $RELEASE
 cd packages/vetkd-notes-client
 wasm-pack build --target web $RELEASE
-mv pkg/wasm_client.js pkg/wasm_client.mjs
+mv pkg/vetkd_notes_client.js pkg/vetkd_notes_client.mjs
 pnpm tsup
 pnpm pack
 cd -

@@ -4,9 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "cargo build && cd packages/vetkd-notes-client && wasm-pack build --target web && mv pkg/wasm_client.js pkg/wasm_client.mjs && pnpm tsup && pnpm pack",
-    "build:release": "cargo build --release && cd packages/vetkd-notes-client && wasm-pack build --release --target web && mv pkg/wasm_client.js pkg/wasm_client.mjs && pnpm tsup && pnpm pack",
-    "watch": "cargo watch --why --ignore packages/wasm-client/tsup.config.bundled* --ignore packages/wasm-client/pkg --ignore packages/wasm-client/dist -x 'build' -s 'cd packages/wasm-client && wasm-pack build && mv pkg/wasm_client.js pkg/wasm_client.mjs && pnpm tsup'"
+    "build": "./build.sh",
+    "build:release": "./build.sh release",
+    "watch": "cargo watch --why --ignore packages/wasm-client/tsup.config.bundled* --ignore packages/wasm-client/pkg --ignore packages/wasm-client/dist -x 'build' -s 'cd packages/wasm-client && wasm-pack build && mv pkg/wasm_client.js pkg/wasm_client.mjs && pnpm tsup'",
+    "clean": "./build.sh clean",
+    "clean:all": "./build.sh clean && rm -rf node_modules"
   },
   "keywords": [],
   "author": "",
