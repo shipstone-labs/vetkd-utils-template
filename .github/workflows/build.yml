@@ -39,15 +39,4 @@ jobs:
         run: pnpm install
     
       - name: 🏗️ Build
-        run: |
-          RUSTC_LOG=debug pnpm build:release
-          if [ -f /tmp/rustc*/list ]; then
-            echo "Found VERSION script at /tmp/rustcNuW5V8/list"
-            for i in /tmp/rustc*/list
-            do
-              echo "$i"
-              cat $i
-            done
-          else
-            echo "VERSION script not found."
-          fi
+        run: pnpm build:release
