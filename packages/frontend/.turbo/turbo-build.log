@@ -1,0 +1,18 @@
+
+
+> frontend@0.2.0 build /Users/andy/Development/vetkd-utils/packages/frontend
+> rollup -c --bundleConfigAsCjs
+
+No local canister_ids.json found. Continuing production
+No production canister_ids.json found. Continuing with local
+[36m
+[1msrc/main.ts[22m → [1mpublic/build/main.js[22m...[39m
+
+[35m🌼 daisyUI components 1.25.4[0m [0m https://github.com/saadeghi/daisyui
+  [32m✔︎ Including:[0m [0m base, components, themes[22], utilities
+  
+
+[1m[33mwarn[39m[22m - No utility classes were detected in your source files. If this is unexpected, double-check the `content` option in your Tailwind CSS configuration.
+[1m[33mwarn[39m[22m - https://tailwindcss.com/docs/content-configuration
+@rollup/plugin-typescript: Typescript 'sourceMap' compiler option must be set to generate source maps.
+[32mcreated [1mpublic/build/main.js[22m in [1m3.7s[22m[39m

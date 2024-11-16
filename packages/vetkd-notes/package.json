@@ -1,0 +1,7 @@
+{
+  "name": "vetkd-notes",
+  "scripts": {
+    "build": "cargo build",
+    "build:release": "cargo build --release"
+  }
+}

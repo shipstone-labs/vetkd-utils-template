@@ -45,7 +45,7 @@ $: editor.enabled = !disabled;
     ? 'opacity-50'
     : ''}"
   use:focus
-/>
+></div>
 
 <style>
   .textarea :global(.placeholder) {

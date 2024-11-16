@@ -1,0 +1,11 @@
+{
+  "extends": "@tsconfig/svelte/tsconfig.json",
+  "compilerOptions": {
+    "verbatimModuleSyntax": true,
+    "importsNotUsedAsValues": "remove",
+    "sourceMap": true
+    // other compiler options...
+  },
+  "include": ["src/**/*", "wasm.d.ts", "node_modules/@shipstone-labs/*"],
+  "exclude": ["node_modules/*", "__sapper__/*", "public/*"]
+}

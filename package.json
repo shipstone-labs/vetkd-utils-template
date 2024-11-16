@@ -4,17 +4,26 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "./build.sh",
-    "build:release": "./build.sh release",
+    "build": "turbo build",
+    "build:release": "tubro build:release",
     "watch": "cargo watch --why --ignore packages/wasm-client/tsup.config.bundled* --ignore packages/wasm-client/pkg --ignore packages/wasm-client/dist -x 'build' -s 'cd packages/wasm-client && wasm-pack build && mv pkg/wasm_client.js pkg/wasm_client.mjs && pnpm tsup'",
-    "clean": "./build.sh clean",
-    "clean:all": "./build.sh clean && rm -rf node_modules"
+    "prune": "turbo prune",
+    "clean": "turbo prune && rm -rf node_modules"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "dependencies": {
+    "@dfinity/agent": "^0.15.7",
+    "@dfinity/auth-client": "^0.15.7",
+    "@dfinity/candid": "^0.15.7",
+    "@dfinity/identity": "^0.15.7",
+    "@dfinity/principal": "^0.15.7"
+  },
   "devDependencies": {
     "tsup": "^8.3.5",
+    "turbo": "^2.3.0",
     "typescript": "^5.6.3"
-  }
+  },
+  "packageManager": "pnpm@9.12.3"
 }

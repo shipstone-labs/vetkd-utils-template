@@ -1,0 +1,11 @@
+{
+  "extends": ["//"],
+  "tasks": {
+    "build": {
+      "outputs": ["../../target/wasm32-unknown-unknown/debug/libvetkd_notes*"]
+    },
+    "build:release": {
+      "outputs": ["../../target/wasm32-unknown-unknown/release/libvetkd_notes*"]
+    }
+  }
+}

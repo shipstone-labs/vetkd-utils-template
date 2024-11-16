@@ -1,0 +1,17 @@
+{
+  "extends": ["//"],
+  "tasks": {
+    "build": {
+      "outputs": [
+        "../../target/wasm32-unknown-unknown/debug/vetkd_notes_canister*",
+        "vetkd_notes_canister.*"
+      ]
+    },
+    "build:release": {
+      "outputs": [
+        "../../target/wasm32-unknown-unknown/release/vetkd_notes_canister*",
+        "vetkd_notes_canister.*"
+      ]
+    }
+  }
+}

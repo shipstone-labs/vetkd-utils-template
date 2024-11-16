@@ -1,0 +1,9 @@
+
+
+> vetkd-notes@ build /Users/andy/Development/vetkd-utils/packages/vetkd-notes
+> cargo build
+
+[1m[36m    Blocking[0m waiting for file lock on package cache
+[1m[36m    Blocking[0m waiting for file lock on package cache
+[1m[36m    Blocking[0m waiting for file lock on package cache
+[1m[32m    Finished[0m ]8;;https://doc.rust-lang.org/cargo/reference/profiles.html#default-profiles\`dev` profile [unoptimized + debuginfo]]8;;\ target(s) in 0.25s

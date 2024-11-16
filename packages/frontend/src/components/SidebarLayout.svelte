@@ -17,7 +17,7 @@ import { copy } from "svelte-copy";
     <Disclaimer />
   </div>
   <div class="drawer-side">
-    <label for="my-drawer-3" class="drawer-overlay" />
+    <label for="my-drawer-3" class="drawer-overlay"></label>
     <aside
       class="flex flex-col justify-between border-r border-base-300 bg-base-100 text-base-content w-64 sm:w-80 "
     >
@@ -62,7 +62,7 @@ import { copy } from "svelte-copy";
             Your IP Docs</a
           >
         </li>
-        <li class="flex-1" />
+        <li class="flex-1"></li>
         <li>
           <button on:click={() => logout()}>
             <span class="w-6 h-6 p-1 mr-2">

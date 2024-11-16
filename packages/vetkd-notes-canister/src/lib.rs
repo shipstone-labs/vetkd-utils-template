@@ -452,3 +452,5 @@ fn vetkd_system_api_canister_id() -> CanisterId {
     use std::str::FromStr;
     CanisterId::from_str(VETKD_SYSTEM_API_CANISTER_ID).expect("failed to create canister ID")
 }
+
+ic_cdk::export_candid!();

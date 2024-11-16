@@ -1,0 +1,11 @@
+{
+  "name": "vetkd-notes-canister",
+  "depenencies": {
+    "@shipstone-labs/vetkd-notes-client": "workspace:*",
+    "vetkd-notes": "workspace:*"
+  },
+  "scripts": {
+    "build": "cargo build && candid-extractor ../../target/wasm32-unknown-unknown/debug/vetkd_notes_canister.wasm > vetkd_notes_canister.did && ../../didc.sh bind -t js vetkd_notes_canister.did > vetkd_notes_canister.mjs && ../../didc.sh bind -t ts vetkd_notes_canister.did > vetkd_notes_canister.d.ts",
+    "build:release": "cargo build --release && candid-extractor ../../target/wasm32-unknown-unknown/release/vetkd_notes_canister.wasm vetkd_notes_canister.did && ../../didc.sh bind -t js vetkd_notes_canister.did > vetkd_notes_canister.mjs && ../../didc.sh bind -t ts vetkd_notes_canister.did > vetkd_notes_canister.d.ts"
+  }
+}
