@@ -11,6 +11,7 @@
   ],
   "scripts": {
     "build": "rollup -c --bundleConfigAsCjs",
+    "build:release": "rollup -c --bundleConfigAsCjs",
     "dev": "rollup -c --bundleConfigAsCjs -w",
     "dev-docker": "rollup -c -w --configExpose",
     "start": "sirv src/frontend/public --no-clear -s --port 3000",
