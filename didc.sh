@@ -4,7 +4,7 @@ then
   ~/bin/didc "${@}"
   exit $?
 fi
-if which didc > /dev/null
+if which didc 2> /dev/null
 then
   didc "${@}"
   exit $?
