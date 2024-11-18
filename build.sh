@@ -39,13 +39,13 @@ candid-extractor \
   bind \
   -t js \
   packages/vetkd-notes-canister/vetkd-notes-canister.did \
-  > packages/vetkd-notes-canister/src/vetkd_notes_canister.mjs
+  --output packages/vetkd-notes-canister/src/vetkd_notes_canister.mjs
 
 ./didc.sh \
   bind \
   -t ts \
   packages/vetkd-notes-canister/vetkd-notes-canister.did \
-  > packages/vetkd-notes-canister/src/vetkd_notes_canister.d.ts
+  --output packages/vetkd-notes-canister/src/vetkd_notes_canister.d.ts
 
 cd packages/frontend
 pnpm build
