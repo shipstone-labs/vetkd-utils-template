@@ -3,6 +3,7 @@
 name = "vetkd-notes"
 version = "0.1.0"
 edition = "2021"
+exclude = [ "package.json", "node_modules", ".turbo", "turbo.json" ]
 
 [dependencies]
 candid = "0.9.11"
