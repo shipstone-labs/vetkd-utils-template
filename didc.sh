@@ -22,7 +22,7 @@ if [ ${machine} = "Mac" ]
 then
   echo "Downloading didc for Mac to ~/bin/didc"
   mkdir -p ~/bin
-  curl -fsSL https://github.com/dfinity/candid/releases/download/${release}/didc-macos > ~/bin/didc
+  curl -fsSL https://github.com/dfinity/candid/releases/download/${release}/didc-macos -o ~/bin/didc
   chmod +x ~/bin/didc
   ~/bin/didc "${@}"
   exit $?
@@ -30,7 +30,7 @@ elif [ ${machine} = "Linux" ]
 then
   echo "Downloading didc for Linux to ~/bin/didc"
   mkdir -p ~/bin
-  curl -fsSL https://github.com/dfinity/candid/releases/download/${release}/didc-linux64 > ~/bin/didc
+  curl -fsSL https://github.com/dfinity/candid/releases/download/${release}/didc-linux64 -o ~/bin/didc
   chmod +x ~/bin/didc
   ~/bin/didc "${@}"
   exit $?
