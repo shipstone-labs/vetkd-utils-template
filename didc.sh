@@ -4,7 +4,7 @@ then
   ~/bin/didc "${@}"
   exit $?
 fi
-if which didc 2> /dev/null
+if which didc > /dev/null 2&>1
 then
   didc "${@}"
   exit $?
@@ -33,5 +33,5 @@ then
   ~/bin/didc "${@}"
   exit $?
 else
-  echo "Could not detect a supported operating system. Please note that didc is currently only supported for Mac and Linux"
+  2> echo "Could not detect a supported operating system. Please note that didc is currently only supported for Mac and Linux"
 fi
