@@ -28,11 +28,16 @@
   "module": "dist/index.js",
   "main": "dist/index.cjs",
   "devDependencies": {
+    "@types/node": "^22.9.0",
     "tsup": "^8.3.5",
     "typescript": "^5.6.3"
   },
   "scripts": {
     "build": "wasm-pack build --target web && rm pkg/README.md pkg/.gitignore pkg/LICENSE pkg/package.json && mv pkg/* src/ && rm -rf pkg && tsup && mv src/*.wasm* dist/",
     "build:release": "wasm-pack build --target web --release && rm pkg/README.md pkg/.gitignore pkg/LICENSE pkg/package.json && mv pkg/* src/ && rm -rf pkg && tsup && mv src/*.wasm* dist/"
+  },
+  "dependencies": {
+    "@dfinity/agent": "^0.15.7",
+    "idb-keyval": "6.2.1"
   }
 }

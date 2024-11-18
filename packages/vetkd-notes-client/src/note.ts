@@ -1,18 +1,7 @@
-import type { EncryptedNote, PrincipalEntry } from "../lib/backend";
-import type { CryptoService } from "./crypto";
+import type { EncryptedNote, PrincipalRule, HistoryEntry } from "./backend.js";
+import type { CryptoService } from "./crypto.js";
 import type { Principal } from "@dfinity/principal";
 
-export interface PrincipalEntryModel {
-  name?: string;
-  when?: bigint;
-}
-
-export interface HistoryEntry {
-  action: string;
-  user: string;
-  when: number;
-  createdAt: number;
-}
 export interface NoteModel {
   id: bigint;
   title: string;
@@ -21,7 +10,7 @@ export interface NoteModel {
   updatedAt: number;
   tags: Array<string>;
   owner: string;
-  users: Array<PrincipalEntryModel>;
+  users: Array<[string, PrincipalRule]>;
   locked: boolean;
   history: Array<HistoryEntry>;
 }
@@ -77,14 +66,9 @@ export async function serialize(
     encrypted_text: encryptedNote,
     data: JSON.stringify(data),
     owner: note.owner,
-    users: note.users.map(
-      (user) =>
-        ({
-          name: user.name ? [user.name] : [],
-          when: user.when ? [user.when] : [],
-        } as PrincipalEntry)
-    ),
+    users: note.users,
     history: [],
+    read_by: [],
     created_at: BigInt(note.createdAt * 1000000),
     updated_at: BigInt(note.updatedAt * 1000000),
     locked: note.locked,
@@ -105,18 +89,15 @@ export async function deserialize(
   return {
     id: enote.id,
     owner: enote.owner,
-    users: enote.users.map((user) => ({
-      name: user.name[0] || null,
-      when: user.when[0] || null,
-    })),
+    users: enote.users,
     ...deserializedNote,
     ...data,
     history: enote.history.map((entry) => ({
       action: entry.action,
-      user: entry.user.length > 0 ? entry.user[0] : null,
-      when:
-        entry.when.length > 0 ? Number(entry.when[0] / BigInt(1000000)) : null,
-      createdAt: Number(entry.created_at / BigInt(1000000)),
+      user: entry.user,
+      rule: entry.rule,
+      labels: entry.labels,
+      created_at: entry.created_at,
     })),
     createdAt: Number(enote.created_at / BigInt(1000000)),
     updatedAt: Number(enote.updated_at / BigInt(1000000)),

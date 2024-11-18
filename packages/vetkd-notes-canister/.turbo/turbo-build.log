@@ -1,11 +1,11 @@
 
 
 > vetkd-notes-canister@ build /Users/andy/Development/vetkd-utils/packages/vetkd-notes-canister
-> cargo build && candid-extractor ../../target/wasm32-unknown-unknown/debug/vetkd_notes_canister.wasm > vetkd_notes_canister.did && ../../didc.sh bind -t js vetkd_notes_canister.did > vetkd_notes_canister.mjs && ../../didc.sh bind -t ts vetkd_notes_canister.did > vetkd_notes_canister.d.ts
+> cargo build && candid-extractor ../../target/wasm32-unknown-unknown/debug/vetkd_notes_canister.wasm > vetkd_notes_canister.did && ../../didc.sh bind -t js vetkd_notes_canister.did > vetkd_notes_canister.mjs && cp vetkd_notes_canister.mjs vetkd_notes_canister.js && ../../didc.sh bind -t ts vetkd_notes_canister.did > vetkd_notes_canister.d.ts
 
 [1m[36m    Blocking[0m waiting for file lock on package cache
 [1m[36m    Blocking[0m waiting for file lock on package cache
 [1m[36m    Blocking[0m waiting for file lock on package cache
 [1m[36m    Blocking[0m waiting for file lock on package cache
 [1m[36m    Blocking[0m waiting for file lock on build directory
-[1m[32m    Finished[0m ]8;;https://doc.rust-lang.org/cargo/reference/profiles.html#default-profiles\`dev` profile [unoptimized + debuginfo]]8;;\ target(s) in 0.27s
+[1m[32m    Finished[0m ]8;;https://doc.rust-lang.org/cargo/reference/profiles.html#default-profiles\`dev` profile [unoptimized + debuginfo]]8;;\ target(s) in 0.11s

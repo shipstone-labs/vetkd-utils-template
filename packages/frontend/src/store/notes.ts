@@ -1,8 +1,12 @@
 import { writable } from "svelte/store";
-import type { BackendActor } from "../lib/actor";
-import type { EncryptedNote } from "../lib/backend";
-import type { CryptoService } from "../lib/crypto";
-import { deserialize, type NoteModel, serialize } from "../lib/note";
+import {
+  type BackendActor,
+  type EncryptedNote,
+  type CryptoService,
+  deserialize,
+  type NoteModel,
+  serialize,
+} from "@shipstone-labs/vetkd-notes-client";
 import { auth } from "./auth";
 import { showError } from "./notifications";
 

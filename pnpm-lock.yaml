@@ -154,7 +154,17 @@ importers:
   packages/vetkd-notes-canister: {}
 
   packages/vetkd-notes-client:
+    dependencies:
+      '@dfinity/agent':
+        specifier: ^0.15.7
+        version: 0.15.7(@dfinity/candid@0.15.7(@types/node@22.9.0)(typescript@5.6.3))(@dfinity/principal@0.15.7(@types/node@22.9.0)(typescript@5.6.3))(@types/node@22.9.0)(typescript@5.6.3)
+      idb-keyval:
+        specifier: 6.2.1
+        version: 6.2.1
     devDependencies:
+      '@types/node':
+        specifier: ^22.9.0
+        version: 22.9.0
       tsup:
         specifier: ^8.3.5
         version: 8.3.5(jiti@1.21.6)(postcss@8.4.49)(typescript@5.6.3)(yaml@2.6.0)
