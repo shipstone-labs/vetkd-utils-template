@@ -1,7 +1,7 @@
 <script lang="ts">
 import { createEventDispatcher } from "svelte";
 
-import { type NoteModel, summarize } from "../lib/note";
+import { type NoteModel, summarize } from "@shipstone-labs/vetkd-notes-client";
 
 export let note: NoteModel;
 

@@ -2,7 +2,11 @@
 import { navigateTo } from "svelte-router-spa";
 import type { CurrentRoute } from "svelte-router-spa/types/components/route";
 import { Editor, placeholder } from "typewriter-editor";
-import { extractTitle, type HistoryEntry, type NoteModel } from "../lib/note";
+import {
+	extractTitle,
+	type HistoryEntry,
+	type NoteModel,
+} from "@shipstone-labs/vetkd-notes-client";
 import {
 	notesStore,
 	refreshNotes,

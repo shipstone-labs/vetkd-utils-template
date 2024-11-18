@@ -1,7 +1,7 @@
 <script lang="ts">
 import { onDestroy } from "svelte";
 import { Editor, placeholder } from "typewriter-editor";
-import { noteFromContent } from "../lib/note";
+import { noteFromContent } from "@shipstone-labs/vetkd-notes-client";
 import { auth } from "../store/auth";
 import { draft } from "../store/draft";
 import { addNote, refreshNotes } from "../store/notes";

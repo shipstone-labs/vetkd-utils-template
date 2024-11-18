@@ -1,9 +1,12 @@
 import { get, writable } from "svelte/store";
-import { type BackendActor, createActor } from "../lib/actor";
+import {
+  type BackendActor,
+  createActor,
+  type CryptoService,
+  sleep,
+} from "@shipstone-labs/vetkd-notes-client";
 import { AuthClient } from "@dfinity/auth-client";
-import { CryptoService } from "../lib/crypto";
 import { addNotification, showError } from "./notifications";
-import { sleep } from "../lib/sleep";
 import type { JsonnableDelegationChain } from "@dfinity/identity/lib/cjs/identity/delegation";
 import { navigateTo } from "svelte-router-spa";
 
