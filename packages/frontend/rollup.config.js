@@ -3,16 +3,18 @@ import commonjs from "@rollup/plugin-commonjs";
 import resolve from "@rollup/plugin-node-resolve";
 import livereload from "rollup-plugin-livereload";
 import terser from "@rollup/plugin-terser";
-import sveltePreprocess from "svelte-preprocess";
+import { sveltePreprocess } from "svelte-preprocess";
 import typescript from "@rollup/plugin-typescript";
 import css from "rollup-plugin-css-only";
 import inject from "@rollup/plugin-inject";
 import json from "@rollup/plugin-json";
 import injectProcessEnv from "rollup-plugin-inject-process-env";
 import wasm from "@rollup/plugin-wasm";
+import alias from "@rollup/plugin-alias";
+import replace from "@rollup/plugin-replace";
 
 const production = !process.env.ROLLUP_WATCH;
-
+console.log("Production: ", production);
 const path = require("node:path");
 
 function initCanisterIds() {
@@ -22,6 +24,7 @@ function initCanisterIds() {
   let canisters;
   try {
     localCanisters = require(path.resolve(
+      "../..",
       ".dfx",
       "local",
       "canister_ids.json"
@@ -31,7 +34,7 @@ function initCanisterIds() {
   }
 
   try {
-    prodCanisters = require("./canister_ids.json");
+    prodCanisters = require("../../canister_ids.json");
   } catch (error) {
     console.log("No production canister_ids.json found. Continuing with local");
   }
@@ -82,7 +85,7 @@ export default (config) => {
   return {
     input: "src/main.ts",
     output: {
-      sourceMap: !production,
+      sourcemap: !production,
       name: "app",
       format: "iife",
       file: "public/build/main.js",
@@ -106,6 +109,21 @@ export default (config) => {
       // a separate file - better for performance
       css({ output: "bundle.css" }),
 
+      alias({
+        entries: [
+          {
+            find: "esm-env",
+            replacement: path.resolve(__dirname, "src/esm-env"),
+          },
+          {
+            find: "typewriter-editor/lib",
+            replacement: path.resolve(
+              __dirname,
+              "node_modules/typewriter-editor/dist"
+            ),
+          },
+        ],
+      }),
       // If you have external dependencies installed from
       // npm, you'll most likely need these plugins. In
       // some cases you'll need additional configuration -
@@ -114,7 +132,8 @@ export default (config) => {
       resolve({
         preferBuiltins: false,
         browser: true,
-        dedupe: ["svelte"],
+        // dedupe: ["svelte"],
+        exportConditions: ["svelte"],
       }),
       wasm({
         // Without setting targetEnv to auto-inline, we run into

@@ -29,7 +29,7 @@ $: contentSummary = summarize(note);
       <div class="mt-4 ">
         {#each note.tags as tag}
           <button
-            class="btn btn-outline btn-sm mr-2 mb-2 pointer-events-auto"
+            class="text-gray-700 bg-transparent border-none py-1 px-2 text-sm hover:bg-gray-100 mr-2 mb-2 pointer-events-auto"
             on:click={(e) => {
               dispatch('tagclick', tag);
               e.stopPropagation();

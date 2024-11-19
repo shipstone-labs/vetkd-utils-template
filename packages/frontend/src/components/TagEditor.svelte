@@ -33,7 +33,7 @@ function onKeyPress(e) {
 <div class="flex flex-wrap gap-2">
   {#each tags as tag}
     <button
-      class="btn btn-outline btn-sm flex items-center"
+      class="border border-gray-400 text-gray-700 rounded-md py-1 px-2 text-sm flex items-center"
       on:click={() => remove(tag)}
     >
       <span>{tag}</span>
@@ -63,7 +63,7 @@ function onKeyPress(e) {
     {disabled}
   />
   <button
-    class="btn btn-sm btn-ghost"
+    class="text-gray-700 bg-transparent border-none py-1 px-2 text-sm hover:bg-gray-100"
     on:click={add}
     disabled={newTag.trim().length === 0 || tags.includes(newTag) || disabled}
     >Add</button

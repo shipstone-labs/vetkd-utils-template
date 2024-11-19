@@ -185,7 +185,7 @@ function onKeyPress(e) {
         disabled={adding || newWhenChecked}
       />
       <button
-        class="mx-3 btn btn-sm btn-ghost
+        class="mx-3 text-gray-700 bg-transparent border-none py-1 px-2 text-sm hover:bg-gray-100
           {!ownedByMe ? 'hidden' : ''}
           {adding || removing ? 'loading' : ''}"
         on:click={add}

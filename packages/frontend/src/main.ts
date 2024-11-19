@@ -1,4 +1,5 @@
 import App from "./App.svelte";
+import { mount } from "svelte";
 import vetkd_init from "@shipstone-labs/vetkd-notes-client";
 import vetkd_wasm from "@shipstone-labs/vetkd-notes-client/dist/vetkd_notes_client_bg.wasm";
 
@@ -10,9 +11,7 @@ const init = async () => {
     await (vetkd_wasm as unknown as () => Promise<WebAssembly.Module>)()
   );
 
-  const app = new App({
-    target: document.body,
-  });
+  mount(App, { target: document.body });
 };
 
 init();

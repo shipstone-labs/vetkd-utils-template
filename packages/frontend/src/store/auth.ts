@@ -2,7 +2,7 @@ import { get, writable } from "svelte/store";
 import {
   type BackendActor,
   createActor,
-  type CryptoService,
+  CryptoService,
   sleep,
 } from "@shipstone-labs/vetkd-notes-client";
 import { AuthClient } from "@dfinity/auth-client";
@@ -104,7 +104,8 @@ export async function authenticate(client: AuthClient) {
   try {
     const actor = createActor({
       agentOptions: {
-        identity: client.getIdentity(),
+        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+        identity: client.getIdentity() as any,
       },
     });
 
@@ -125,7 +126,7 @@ export async function authenticate(client: AuthClient) {
   } catch (e) {
     auth.update(() => ({
       state: "error",
-      error: e.message || "An error occurred",
+      error: (e as { message: string }).message || "An error occurred",
     }));
   }
 }
@@ -136,7 +137,7 @@ function handleSessionTimeout() {
   setTimeout(() => {
     try {
       const delegation = JSON.parse(
-        window.localStorage.getItem("ic-delegation")
+        window.localStorage.getItem("ic-delegation") || ""
       ) as JsonnableDelegationChain;
 
       const expirationTimeMs =

@@ -93,7 +93,7 @@ onDestroy(saveDraft);
     </div>
   </div>
   <button
-    class="btn mt-6 btn-primary {creating ? 'loading' : ''}"
+    class="bg-blue-500 text-white rounded-md py-2 px-4 hover:bg-blue-600 mt-6 {creating ? 'loading' : ''}"
     disabled={creating}
     on:click={add}>{creating ? 'Adding...' : 'Add note'}</button
   >
