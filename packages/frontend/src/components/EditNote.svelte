@@ -143,7 +143,7 @@ $: {
       disabled={updating || deleting}
     >
       {#if !deleting}
-        <span class="w-6 h-6 p-1"><Trash /></span>
+        <span class="inline-block w-6 h-6 p-1"><Trash /></span>
       {/if}
 
       {deleting ? 'Deleting...' : ''}

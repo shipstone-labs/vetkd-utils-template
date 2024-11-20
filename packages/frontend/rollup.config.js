@@ -12,6 +12,7 @@ import injectProcessEnv from "rollup-plugin-inject-process-env";
 import wasm from "@rollup/plugin-wasm";
 import alias from "@rollup/plugin-alias";
 import replace from "@rollup/plugin-replace";
+import postcss from "rollup-plugin-postcss";
 
 const production = !process.env.ROLLUP_WATCH;
 console.log("Production: ", production);
@@ -95,19 +96,27 @@ export default (config) => {
       svelte({
         preprocess: sveltePreprocess({
           sourceMap: !production,
-          postcss: {
-            plugins: [require("tailwindcss")(), require("autoprefixer")()],
-          },
+          postcss: false,
         }),
+        emitCss: true, //
         compilerOptions: {
           // enable run-time checks when not in production
           dev: !production,
           sourcemap: !production,
+          css: false,
         },
       }),
       // we'll extract any component CSS out into
       // a separate file - better for performance
-      css({ output: "bundle.css" }),
+      postcss({
+        plugins: [
+          require("tailwindcss")(), // Tailwind CSS
+          require("autoprefixer")(), // Autoprefixer for compatibility
+        ],
+        extract: true, // Extract all styles into a single CSS file
+        output: "bundle.css",
+      }),
+      // css({ output: "bundle.css" }),
 
       alias({
         entries: [
