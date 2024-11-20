@@ -37,7 +37,7 @@ $: {
   <span slot="title"> Your IP Docs </span>
   <svelte:fragment slot="actions">
     {#if $notesStore.state === 'loaded' && $notesStore.list.length > 0}
-      <a class="bg-blue-500 text-white rounded-md py-2 px-4 hover:bg-blue-600" href="/">New IP Doc</a>
+      <a class="bg-blue-500 text-white rounded-md py-2 px-4 hover:bg-blue-600" href="/new">New IP Doc</a>
     {/if}
   </svelte:fragment>
 </Header>

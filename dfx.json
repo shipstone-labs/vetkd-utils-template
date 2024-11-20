@@ -28,7 +28,10 @@
   "networks": {
     "local": {
       "bind": "0.0.0.0:8000",
-      "type": "ephemeral"
+      "type": "ephemeral",
+      "canister_ids": {
+        "vetkd_system_api": "be2us-64aaa-aaaaa-qaabq-cai"
+      }
     }
   },
   "version": 1

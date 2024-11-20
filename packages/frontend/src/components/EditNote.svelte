@@ -93,7 +93,7 @@ async function deleteNote() {
 				type: "success",
 				message: "IP Doc deleted successfully",
 			});
-			navigateTo("/notes");
+			navigateTo("/");
 		});
 }
 

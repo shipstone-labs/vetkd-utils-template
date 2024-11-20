@@ -9,6 +9,7 @@ import { addNotification, showError } from "../store/notifications";
 import Header from "./Header.svelte";
 import NoteEditor from "./NoteEditor.svelte";
 import TagEditor from "./TagEditor.svelte";
+import { navigateTo } from "svelte-router-spa";
 
 let creating = false;
 let tags: string[] = $draft.tags;
@@ -36,6 +37,9 @@ async function add() {
 	)
 		.catch((e) => {
 			showError(e, "Could not add note.");
+		})
+		.then(() => {
+			navigateTo("/");
 		})
 		.finally(() => {
 			creating = false;

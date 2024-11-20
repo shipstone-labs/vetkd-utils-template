@@ -14,7 +14,7 @@ $: contentSummary = summarize(note);
 
 <a
   class="p-4 rounded-md border border-base-300 dark:border-base-300  bg-base dark:bg-base-100 hover:-translate-y-2 transition-transform"
-  href={`/notes/edit/${note.id}`}
+  href={`/edit/${note.id}`}
 >
   <div class="pointer-events-none">
     <h2 class="text-lg font-bold mb-2 line-clamp-3">

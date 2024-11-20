@@ -346,7 +346,7 @@ fn caller() -> Principal {
 
 mod vetkd_types;
 
-const VETKD_SYSTEM_API_CANISTER_ID: &str = "s55qq-oqaaa-aaaaa-aaakq-cai";
+pub const VETKD_SYSTEM_API_CANISTER_ID: &str = "be2us-64aaa-aaaaa-qaabq-cai";
 
 use vetkd_types::{
     CanisterId, VetKDCurve, VetKDEncryptedKeyReply, VetKDEncryptedKeyRequest, VetKDKeyId,
@@ -406,7 +406,7 @@ fn bls12_381_test_key_1() -> VetKDKeyId {
     }
 }
 
-fn vetkd_system_api_canister_id() -> CanisterId {
+pub fn vetkd_system_api_canister_id() -> CanisterId {
     use std::str::FromStr;
     CanisterId::from_str(VETKD_SYSTEM_API_CANISTER_ID).expect("failed to create canister ID")
 }

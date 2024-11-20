@@ -7,7 +7,7 @@ use ic_stable_structures::{
 use std::borrow::Cow;
 use std::cell::RefCell;
 use std::collections::HashMap;
-use vetkd_notes::{EncryptedNote, NoteId, EVERYONE};
+use vetkd_notes::{vetkd_system_api_canister_id, EncryptedNote, NoteId, EVERYONE};
 
 type Memory = VirtualMemory<DefaultMemoryImpl>;
 
@@ -377,11 +377,9 @@ fn remove_user(note_id: NoteId, user: Option<String>) {
 
 mod vetkd_types;
 
-const VETKD_SYSTEM_API_CANISTER_ID: &str = "nn664-2iaaa-aaaao-a3tqq-cai";
-
 use vetkd_types::{
-    CanisterId, VetKDCurve, VetKDEncryptedKeyReply, VetKDEncryptedKeyRequest, VetKDKeyId,
-    VetKDPublicKeyReply, VetKDPublicKeyRequest,
+    VetKDCurve, VetKDEncryptedKeyReply, VetKDEncryptedKeyRequest, VetKDKeyId, VetKDPublicKeyReply,
+    VetKDPublicKeyRequest,
 };
 
 #[update]
@@ -446,11 +444,6 @@ fn bls12_381_test_key_1() -> VetKDKeyId {
         curve: VetKDCurve::Bls12_381,
         name: "test_key_1".to_string(),
     }
-}
-
-fn vetkd_system_api_canister_id() -> CanisterId {
-    use std::str::FromStr;
-    CanisterId::from_str(VETKD_SYSTEM_API_CANISTER_ID).expect("failed to create canister ID")
 }
 
 ic_cdk::export_candid!();
