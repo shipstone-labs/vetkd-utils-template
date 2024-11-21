@@ -346,7 +346,7 @@ fn caller() -> Principal {
 
 mod vetkd_types;
 
-pub const VETKD_SYSTEM_API_CANISTER_ID: &str = "be2us-64aaa-aaaaa-qaabq-cai";
+pub const VETKD_SYSTEM_API_CANISTER_ID: &str = "nn664-2iaaa-aaaao-a3tqq-cai";
 
 use vetkd_types::{
     CanisterId, VetKDCurve, VetKDEncryptedKeyReply, VetKDEncryptedKeyRequest, VetKDKeyId,
