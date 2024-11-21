@@ -55,8 +55,8 @@ async function add() {
 		dispatch("message", {
 			action: "shared",
 			user: newSharingChecked ? null : newSharing || "everyone",
-			when,
-			createdAt: Date.now(),
+			rule: newSharingChecked ? [["everyone", newWhenChecked ? [newWhenValue] : []]] : [[newSharing, newWhenChecked ? [newWhenValue] : []]],
+			created_at: BigInt(Date.now()) * BigInt(1000000),
 		});
 		newSharing = "";
 		newSharingChecked = false;

@@ -34,15 +34,6 @@ export let history: HistoryEntry[] = [];
 export let ownedByMe = true;
 
 function addHistory(e) {
-	if (e.detail.action === "shared") {
-		if (!editedNote.locked) {
-			editedNote.locked = true;
-			history = [
-				...history,
-				{ action: "locked", user: null, when: null, createdAt: Date.now() },
-			];
-		}
-	}
 	history = [...history, { ...e.detail }];
 }
 
@@ -199,11 +190,11 @@ $: {
         <div class="space-y-1">
           {#each history as entry}
             <div class="flex flex-row bg-gray-200 dark:bg-base-200 space-x-4 text-sm p-2 rounded-lg shadow-md">
-              <span class="font-mono text-gray-600 dark:text-white text-xs">{new Date(entry.createdAt).toLocaleDateString()}<br/>{new Date(entry.createdAt).toLocaleTimeString()}</span>
+              <span class="font-mono text-gray-600 dark:text-white text-xs">{new Date(Number(entry.created_at / BigInt(1000000))).toLocaleDateString()}<br/>{new Date(Number(entry.created_at / BigInt(1000000))).toLocaleTimeString()}</span>
               <span>
                 {entry.action}
                 {entry.action.includes("shared") ? `with ${entry.user || "everyone"}` : ""}
-                {entry.action === "shared" ? entry.when ? `after ${new Date(entry.when).toLocaleString()}` : "always" : ""}
+                {entry.rule ? entry.rule.map(([user, when]) => `${user} (${when?.[0] ? `after ${new Date(Number(when[0]/ BigInt(1000000))).toLocaleString()}` : "always"})`).join(', ') : ""}
               </span>
             </div>
           {/each}
