@@ -412,7 +412,7 @@ async fn encrypted_symmetric_key_for_note(
             if !note.lock_authorized() {
                 ic_cdk::trap(&format!("unauthorized key request by user {user_str}"));
             }
-            VetKDEncryptedKeyRequest {
+            let result = VetKDEncryptedKeyRequest {
                 derivation_id: {
                     let mut buf = vec![];
                     buf.extend_from_slice(&note_id.to_be_bytes()); // fixed-size encoding
@@ -422,7 +422,9 @@ async fn encrypted_symmetric_key_for_note(
                 public_key_derivation_path: vec![b"note_symmetric_key".to_vec()],
                 key_id: bls12_381_test_key_1(),
                 encryption_public_key,
-            }
+            };
+            notes.insert(note_id, note);
+            result
         } else {
             ic_cdk::trap(&format!("note with ID {note_id} does not exist"));
         }

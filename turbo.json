@@ -3,11 +3,13 @@
   "ui": "tui",
   "tasks": {
     "build": {
+      "env": ["NODE_ENV", "DFX_NETWORK"],
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist/**", "pgk/**", "target/debug/**", "target/**/debug/**"]
     },
     "build:release": {
+      "env": ["NODE_ENV", "DFX_NETWORK"],
       "dependsOn": ["^build:release"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": [

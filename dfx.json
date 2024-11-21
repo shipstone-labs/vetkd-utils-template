@@ -11,13 +11,14 @@
       "candid": "packages/vetkd-notes-canister/vetkd_notes_canister.did",
       "package": "vetkd-notes-canister"
     },
-    "www": {
+    "vetkd_www": {
       "dependencies": ["vetkd_notes", "vetkd_system_api"],
       "frontend": {
         "entrypoint": "packages/frontend/public/index.html"
       },
       "source": ["packages/frontend/public/"],
-      "type": "assets"
+      "type": "assets",
+      "build": "pnpm build --filter=frontend"
     },
     "internet_identity": {
       "candid": "https://github.com/dfinity/internet-identity/releases/latest/download/internet_identity.did",

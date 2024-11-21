@@ -104,7 +104,7 @@ export async function authenticate(client: AuthClient) {
   try {
     const actor = createActor({
       agentOptions: {
-        identity: client.getIdentity(),
+        identity: client.getIdentity() as any,
       },
     });
 

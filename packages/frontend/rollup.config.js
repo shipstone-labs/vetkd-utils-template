@@ -13,7 +13,7 @@ import { wasm } from "@rollup/plugin-wasm";
 
 const production = !process.env.ROLLUP_WATCH;
 
-const path = require("path");
+const path = require("node:path");
 
 function initCanisterIds() {
   let localCanisters;
@@ -46,6 +46,7 @@ function initCanisterIds() {
       ? { ...(localCanisters || {}), ...(localIiCanister || {}) }
       : prodCanisters;
 
+  console.log(process.env.NODE_ENV, canisterIds, network);
   return { canisterIds, network };
 }
 const { canisterIds, network } = initCanisterIds();
@@ -154,10 +155,14 @@ export default (config) => {
           {},
           ...Object.keys(canisterIds)
             .filter((canisterName) => canisterName !== "__Candid_UI")
-            .map((canisterName) => ({
-              [`${canisterName.toUpperCase()}_CANISTER_ID`]:
-                canisterIds[canisterName][network],
-            }))
+            .map((canisterName) => {
+              const name = `${canisterName.toUpperCase()}_CANISTER_ID`;
+              const value = canisterIds[canisterName][network];
+              console.log(canisterName, name, value);
+              return {
+                [name]: value,
+              };
+            })
         ),
       }),
 

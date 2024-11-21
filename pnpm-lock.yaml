@@ -59,6 +59,9 @@ importers:
       typewriter-editor:
         specifier: ^0.6.45
         version: 0.6.45(svelte@3.59.2)
+      vetkd-notes-canister:
+        specifier: workspace:*
+        version: link:../vetkd-notes-canister
     devDependencies:
       '@babel/preset-env':
         specifier: ^7.26.0

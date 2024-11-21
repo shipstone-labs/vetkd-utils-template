@@ -5,7 +5,8 @@
       "outputs": ["public/build/**"]
     },
     "build:release": {
-      "outputs": ["public/build/**"]
+      "outputs": ["public/build/**"],
+      "env": ["NODE_ENV"]
     },
     "dev": {}
   }
