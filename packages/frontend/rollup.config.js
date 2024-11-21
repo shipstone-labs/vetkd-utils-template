@@ -3,20 +3,17 @@ import commonjs from "@rollup/plugin-commonjs";
 import resolve from "@rollup/plugin-node-resolve";
 import livereload from "rollup-plugin-livereload";
 import terser from "@rollup/plugin-terser";
-import { sveltePreprocess } from "svelte-preprocess";
+import sveltePreprocess from "svelte-preprocess";
 import typescript from "@rollup/plugin-typescript";
 import css from "rollup-plugin-css-only";
-import inject from "@rollup/plugin-inject";
+import inject from "rollup-plugin-inject";
 import json from "@rollup/plugin-json";
 import injectProcessEnv from "rollup-plugin-inject-process-env";
-import wasm from "@rollup/plugin-wasm";
-import alias from "@rollup/plugin-alias";
-import replace from "@rollup/plugin-replace";
-import postcss from "rollup-plugin-postcss";
+import { wasm } from "@rollup/plugin-wasm";
 
 const production = !process.env.ROLLUP_WATCH;
-console.log("Production: ", production);
-const path = require("node:path");
+
+const path = require("path");
 
 function initCanisterIds() {
   let localCanisters;
@@ -96,43 +93,35 @@ export default (config) => {
       svelte({
         preprocess: sveltePreprocess({
           sourceMap: !production,
-          postcss: false,
+          postcss: {
+            plugins: [require("tailwindcss")(), require("autoprefixer")()],
+          },
         }),
-        emitCss: true, //
         compilerOptions: {
           // enable run-time checks when not in production
           dev: !production,
-          sourcemap: !production,
-          css: false,
         },
       }),
       // we'll extract any component CSS out into
       // a separate file - better for performance
-      postcss({
-        plugins: [
-          require("tailwindcss")(), // Tailwind CSS
-          require("autoprefixer")(), // Autoprefixer for compatibility
-        ],
-        extract: true, // Extract all styles into a single CSS file
-        output: "bundle.css",
-      }),
-      // css({ output: "bundle.css" }),
+      css({ output: "bundle.css" }),
 
-      alias({
-        entries: [
-          {
-            find: "esm-env",
-            replacement: path.resolve(__dirname, "src/esm-env"),
-          },
-          {
-            find: "typewriter-editor/lib",
-            replacement: path.resolve(
-              __dirname,
-              "node_modules/typewriter-editor/dist"
-            ),
-          },
-        ],
-      }),
+      // alias({
+      //   entries: [
+      //     {
+      //       find: "esm-env",
+      //       replacement: path.resolve(__dirname, "src/esm-env"),
+      //     },
+      //     {
+      //       find: "typewriter-editor/lib",
+      //       replacement: path.resolve(
+      //         __dirname,
+      //         "node_modules/typewriter-editor/dist"
+      //       ),
+      //     },
+      //   ],
+      // }),
+
       // If you have external dependencies installed from
       // npm, you'll most likely need these plugins. In
       // some cases you'll need additional configuration -
@@ -141,8 +130,7 @@ export default (config) => {
       resolve({
         preferBuiltins: false,
         browser: true,
-        // dedupe: ["svelte"],
-        exportConditions: ["svelte"],
+        dedupe: ["svelte"],
       }),
       wasm({
         // Without setting targetEnv to auto-inline, we run into

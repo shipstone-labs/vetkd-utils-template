@@ -129,7 +129,7 @@ function onKeyPress(e) {
     {#each editedNote.users as sharing}
       <div class="flex flex-row">
         <button
-          class="border border-gray-400 text-gray-700 rounded-md py-1 px-2 text-sm flex flex-row items-center gap-2 space-2"
+          class="btn btn-outline btn-sm flex flex-row items-center gap-2 space-2"
           on:click={() => {
             remove(sharing.name);
           }}
@@ -185,7 +185,7 @@ function onKeyPress(e) {
         disabled={adding || newWhenChecked}
       />
       <button
-        class="mx-3 text-gray-700 bg-transparent border-none py-1 px-2 text-sm hover:bg-gray-100
+        class="mx-3 btn btn-sm btn-ghost
           {!ownedByMe ? 'hidden' : ''}
           {adding || removing ? 'loading' : ''}"
         on:click={add}

@@ -42,7 +42,7 @@ export let auth: Extract<
           Synchronizing... Please keep the app open on a device that's already added.
         </div>
       {:else if auth.state === 'anonymous'}
-        <button class="bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600" on:click={() => login()}
+        <button class="btn btn-primary" on:click={() => login()}
           >Login to Store and Share your IP</button
         >
       {:else if auth.state === 'error'}

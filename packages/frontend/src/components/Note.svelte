@@ -14,7 +14,7 @@ $: contentSummary = summarize(note);
 
 <a
   class="p-4 rounded-md border border-base-300 dark:border-base-300  bg-base dark:bg-base-100 hover:-translate-y-2 transition-transform"
-  href={`/edit/${note.id}`}
+  href={`/notes/edit/${note.id}`}
 >
   <div class="pointer-events-none">
     <h2 class="text-lg font-bold mb-2 line-clamp-3">
@@ -29,7 +29,7 @@ $: contentSummary = summarize(note);
       <div class="mt-4 ">
         {#each note.tags as tag}
           <button
-            class="text-gray-700 bg-transparent border-none py-1 px-2 text-sm hover:bg-gray-100 mr-2 mb-2 pointer-events-auto"
+            class="btn btn-outline btn-sm mr-2 mb-2 pointer-events-auto"
             on:click={(e) => {
               dispatch('tagclick', tag);
               e.stopPropagation();

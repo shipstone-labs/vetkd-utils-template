@@ -1,6 +1,6 @@
 <script lang="ts">
 import type { Editor } from "typewriter-editor";
-import { asRoot } from "typewriter-editor/lib/asRoot.js";
+import asRoot from "typewriter-editor/lib/asRoot";
 import BubbleMenu from "typewriter-editor/lib/BubbleMenu.svelte";
 import Heading from "svelte-icons/fa/FaHeading.svelte";
 import Bold from "svelte-icons/fa/FaBold.svelte";
@@ -24,17 +24,17 @@ $: editor.enabled = !disabled;
 
 <BubbleMenu for={null} {editor} let:commands offset={8}>
   <div class="btn-group">
-    <button class="bg-gray-200 text-black rounded-md py-1 px-2 text-sm hover:bg-gray-300" on:click={commands.header1}>
-      <span class="inline-block w-6 h-6 p-1"><Heading /></span>
+    <button class="btn btn-sm" on:click={commands.header1}>
+      <span class="w-6 h-6 p-1"><Heading /></span>
     </button>
-    <button class="bg-gray-200 text-black rounded-md py-1 px-2 text-sm hover:bg-gray-300" on:click={commands.bulletList}>
-      <span class="inline-block w-6 h-6 p-1"><FaListUl /></span>
+    <button class="btn btn-sm" on:click={commands.bulletList}>
+      <span class="w-6 h-6 p-1"><FaListUl /></span>
     </button>
-    <button class="bg-gray-200 text-black rounded-md py-1 px-2 text-sm hover:bg-gray-300" on:click={commands.bold}>
-      <span class="inline-block w-6 h-6 p-1"><Bold /></span>
+    <button class="btn btn-sm" on:click={commands.bold}>
+      <span class="w-6 h-6 p-1"><Bold /></span>
     </button>
-    <button class="bg-gray-200 text-black rounded-md py-1 px-2 text-sm hover:bg-gray-300" on:click={commands.italic}>
-      <span class="inline-block w-6 h-6 p-1"><Italic /></span>
+    <button class="btn btn-sm" on:click={commands.italic}>
+      <span class="w-6 h-6 p-1"><Italic /></span>
     </button>
   </div>
 </BubbleMenu>
@@ -45,7 +45,7 @@ $: editor.enabled = !disabled;
     ? 'opacity-50'
     : ''}"
   use:focus
-></div>
+/>
 
 <style>
   .textarea :global(.placeholder) {

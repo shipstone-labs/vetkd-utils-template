@@ -104,8 +104,7 @@ export async function authenticate(client: AuthClient) {
   try {
     const actor = createActor({
       agentOptions: {
-        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-        identity: client.getIdentity() as any,
+        identity: client.getIdentity(),
       },
     });
 
@@ -126,7 +125,7 @@ export async function authenticate(client: AuthClient) {
   } catch (e) {
     auth.update(() => ({
       state: "error",
-      error: (e as { message: string }).message || "An error occurred",
+      error: e.message || "An error occurred",
     }));
   }
 }
@@ -137,7 +136,7 @@ function handleSessionTimeout() {
   setTimeout(() => {
     try {
       const delegation = JSON.parse(
-        window.localStorage.getItem("ic-delegation") || ""
+        window.localStorage.getItem("ic-delegation")
       ) as JsonnableDelegationChain;
 
       const expirationTimeMs =

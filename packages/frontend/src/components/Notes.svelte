@@ -1,5 +1,5 @@
 <script lang="ts">
-import type { NoteModel } from "../lib/note";
+import type { NoteModel } from "@shipstone-labs/vetkd-notes-client";
 
 import { notesStore } from "../store/notes";
 import Header from "./Header.svelte";
@@ -37,7 +37,7 @@ $: {
   <span slot="title"> Your IP Docs </span>
   <svelte:fragment slot="actions">
     {#if $notesStore.state === 'loaded' && $notesStore.list.length > 0}
-      <a class="bg-blue-500 text-white rounded-md py-2 px-4 hover:bg-blue-600" href="/new">New IP Doc</a>
+      <a class="btn btn-primary" href="/">New IP Doc</a>
     {/if}
   </svelte:fragment>
 </Header>
@@ -67,7 +67,7 @@ $: {
     {:else}
       <div class="text-center pt-8 italic">You don't have any IP Docs.</div>
       <div class="text-center pt-8 ">
-        <a href="/" class="bg-blue-500 text-white rounded-md py-2 px-4 hover:bg-blue-600">Add you IP Doc</a>
+        <a href="/" class="btn btn-primary">Add you IP Doc</a>
       </div>
     {/if}
   {:else if $notesStore.state === 'error'}

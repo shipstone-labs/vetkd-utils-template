@@ -1,7 +1,6 @@
 <script lang="ts">
 import { onDestroy } from "svelte";
 import { Editor, placeholder } from "typewriter-editor";
-import { noteFromContent } from "@shipstone-labs/vetkd-notes-client";
 import { auth } from "../store/auth";
 import { draft } from "../store/draft";
 import { addNote, refreshNotes } from "../store/notes";
@@ -9,7 +8,7 @@ import { addNotification, showError } from "../store/notifications";
 import Header from "./Header.svelte";
 import NoteEditor from "./NoteEditor.svelte";
 import TagEditor from "./TagEditor.svelte";
-import { navigateTo } from "svelte-router-spa";
+import { noteFromContent } from "@shipstone-labs/vetkd-notes-client";
 
 let creating = false;
 let tags: string[] = $draft.tags;
@@ -37,9 +36,6 @@ async function add() {
 	)
 		.catch((e) => {
 			showError(e, "Could not add note.");
-		})
-		.then(() => {
-			navigateTo("/");
 		})
 		.finally(() => {
 			creating = false;
@@ -97,7 +93,7 @@ onDestroy(saveDraft);
     </div>
   </div>
   <button
-    class="bg-blue-500 text-white rounded-md py-2 px-4 hover:bg-blue-600 mt-6 {creating ? 'loading' : ''}"
+    class="btn mt-6 btn-primary {creating ? 'loading' : ''}"
     disabled={creating}
     on:click={add}>{creating ? 'Adding...' : 'Add note'}</button
   >

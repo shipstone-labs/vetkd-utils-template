@@ -93,7 +93,7 @@ async function deleteNote() {
 				type: "success",
 				message: "IP Doc deleted successfully",
 			});
-			navigateTo("/");
+			navigateTo("/notes");
 		});
 }
 
@@ -138,12 +138,12 @@ $: {
     <span slot="title"> Edit note </span>
     <button
       slot="actions"
-      class="text-gray-700 bg-transparent border-none py-1 px-2 hover:bg-gray-100 {deleting ? 'loading' : ''} {!ownedByMe || editedNote.locked ? 'hidden' : ''}"
+      class="btn btn-ghost {deleting ? 'loading' : ''} {!ownedByMe || editedNote.locked ? 'hidden' : ''}"
       on:click={deleteNote}
       disabled={updating || deleting}
     >
       {#if !deleting}
-        <span class="inline-block w-6 h-6 p-1"><Trash /></span>
+        <span class="w-6 h-6 p-1"><Trash /></span>
       {/if}
 
       {deleting ? 'Deleting...' : ''}
@@ -184,7 +184,7 @@ $: {
       <!-- Action Buttons and Sharing Section -->
       <div class="space-y-4">
         <button
-          class="bg-blue-500 text-white rounded-md py-2 px-4 hover:bg-blue-600 {updating ? 'loading' : ''} w-full md:w-auto"
+          class="btn btn-primary {updating ? 'loading' : ''} w-full md:w-auto"
           disabled={updating || deleting || !ownedByMe || editedNote.locked}
           on:click={save}>
           {updating ? 'Saving...' : 'Save'}

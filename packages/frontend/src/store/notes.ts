@@ -93,7 +93,10 @@ export async function addUser(
   when: bigint | null,
   actor: BackendActor
 ) {
-  await actor.add_user(id, user ? [user] : [], when ? [when] : []);
+  await actor.add_user(id, {
+    name: user ? [user] : [],
+    when: when ? [when] : [],
+  });
 }
 
 export async function removeUser(
