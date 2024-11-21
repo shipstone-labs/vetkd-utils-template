@@ -67,7 +67,7 @@ $: {
     {:else}
       <div class="text-center pt-8 italic">You don't have any IP Docs.</div>
       <div class="text-center pt-8 ">
-        <a href="/" class="btn btn-primary">Add you IP Doc</a>
+        <a href="/" class="btn btn-primary">Add your IP Doc</a>
       </div>
     {/if}
   {:else if $notesStore.state === 'error'}

@@ -193,7 +193,6 @@ $: {
               <span class="font-mono text-gray-600 dark:text-white text-xs">{new Date(Number(entry.created_at / BigInt(1000000))).toLocaleDateString()}<br/>{new Date(Number(entry.created_at / BigInt(1000000))).toLocaleTimeString()}</span>
               <span>
                 {entry.action}
-                {entry.action.includes("shared") ? `with ${entry.user || "everyone"}` : ""}
                 {entry.rule ? entry.rule.map(([user, when]) => `${user} (${when?.[0] ? `after ${new Date(Number(when[0]/ BigInt(1000000))).toLocaleString()}` : "always"})`).join(', ') : ""}
               </span>
             </div>

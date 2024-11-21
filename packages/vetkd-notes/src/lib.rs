@@ -167,17 +167,19 @@ impl EncryptedNote {
         if let Some(r) = self.users.get_mut(user) {
             if r.when.is_none() || r.when.unwrap() <= ic_cdk::api::time() {
                 r.was_read = true;
-                self.history.append(&mut vec![HistoryEntry {
-                    action: "read".to_string(),
-                    user: user.to_string(),
-                    labels: if self.locked {
-                        vec![]
-                    } else {
-                        vec!["locked".to_string()]
-                    },
-                    rule: Some((user.clone(), r.when)),
-                    created_at: ic_cdk::api::time(),
-                }]);
+                if !self.read_by.contains(user) {
+                    self.history.push(HistoryEntry {
+                        action: "read".to_string(),
+                        user: user.to_string(),
+                        labels: if self.locked {
+                            vec![]
+                        } else {
+                            vec!["locked".to_string()]
+                        },
+                        rule: Some((user.clone(), r.when)),
+                        created_at: ic_cdk::api::time(),
+                    });
+                }
                 self.locked = true;
                 self.read_by.insert(user.to_string());
                 return true;
@@ -185,18 +187,20 @@ impl EncryptedNote {
         } else if let Some(r) = self.users.get_mut(EVERYONE) {
             if r.when.is_none() || r.when.unwrap() <= ic_cdk::api::time() {
                 r.was_read = true;
+                if !self.read_by.contains(user) {
+                    self.history.push(HistoryEntry {
+                        action: "read".to_string(),
+                        user: user.to_string(),
+                        labels: if self.locked {
+                            vec![]
+                        } else {
+                            vec!["locked".to_string()]
+                        },
+                        rule: Some((EVERYONE.to_string(), r.when)),
+                        created_at: ic_cdk::api::time(),
+                    });
+                }
                 self.read_by.insert(user.to_string());
-                self.history.append(&mut vec![HistoryEntry {
-                    action: "read".to_string(),
-                    user: user.to_string(),
-                    labels: if self.locked {
-                        vec![]
-                    } else {
-                        vec!["locked".to_string()]
-                    },
-                    rule: Some((EVERYONE.to_string(), r.when)),
-                    created_at: ic_cdk::api::time(),
-                }]);
                 self.locked = true;
                 return true;
             }
@@ -248,7 +252,7 @@ impl EncryptedNote {
         if self.users.contains_key(&user_name) {
             self.users.remove(user_name.as_str());
             self.history.push(HistoryEntry {
-                action: "unshared".to_string(),
+                action: "unshare".to_string(),
                 labels: vec![],
                 user: user_name.clone(),
                 rule: None,

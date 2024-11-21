@@ -53,9 +53,11 @@ async function add() {
 			? null
 			: Number(dateValue(newWhenValue) / BigInt(1000000));
 		dispatch("message", {
-			action: "shared",
+			action: "share",
 			user: newSharingChecked ? null : newSharing || "everyone",
-			rule: newSharingChecked ? [["everyone", newWhenChecked ? [newWhenValue] : []]] : [[newSharing, newWhenChecked ? [newWhenValue] : []]],
+			rule: newSharingChecked
+				? [["everyone", newWhenChecked ? [newWhenValue] : []]]
+				: [[newSharing, newWhenChecked ? [newWhenValue] : []]],
 			created_at: BigInt(Date.now()) * BigInt(1000000),
 		});
 		newSharing = "";
@@ -82,7 +84,7 @@ async function remove(sharing: string) {
 			message: "User successfully removed",
 		});
 		dispatch("message", {
-			action: "unshared",
+			action: "unshare",
 			user: sharing || "everyone",
 			when: null,
 			createdAt: Date.now(),
