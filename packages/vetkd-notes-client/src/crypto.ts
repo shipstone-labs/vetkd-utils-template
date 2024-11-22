@@ -48,7 +48,7 @@ export class CryptoService {
     const note_key: CryptoKey = await get([note_id.toString(), owner]);
 
     if (data.length < 13) {
-      throw new Error("wrong encoding, too short to contain iv");
+      return '{"content": ""}'; // This just didn't save any content yet.
     }
     const iv_decoded = data.slice(0, 12);
     const cipher_decoded = data.slice(12);

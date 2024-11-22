@@ -32,22 +32,8 @@ async function decryptNotes(
   notes: EncryptedNote[],
   cryptoService: CryptoService
 ): Promise<NoteModel[]> {
-  // When notes are initially created, they do not have (and cannot have) any
-  // (encrypted) content yet because the note ID, which is needed to retrieve
-  // the note-specific encryption key, is not known yet before the note is
-  // created because the note ID is a return value of the call to create a note.
-  // The (encrypted) note content is stored in the backend only by a second call
-  // to the backend that updates the note's conent directly after the note is
-  // created. This means that there is a short period of time where the note
-  // already exists but doesn't have any (encrypted) content yet.
-  // To avoid decryption errors for these notes, we skip deserializing (and thus
-  // decrypting) these notes here.
-  const notes_with_content = notes.filter((note) => note.encrypted_text !== "");
-
   return await Promise.all(
-    notes_with_content.map((encryptedNote) =>
-      deserialize(encryptedNote, cryptoService)
-    )
+    notes.map((encryptedNote) => deserialize(encryptedNote, cryptoService))
   );
 }
 
@@ -93,10 +79,7 @@ export async function addUser(
   when: bigint | null,
   actor: BackendActor
 ) {
-  await actor.add_user(id,
-    user ? [user] : [],
-    when ? [when] : [],
-  );
+  await actor.add_user(id, user ? [user] : [], when ? [when] : []);
 }
 
 export async function removeUser(

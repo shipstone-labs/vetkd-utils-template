@@ -85,7 +85,9 @@ export async function deserialize(
     enote.encrypted_text
   );
   const deserializedNote: SerializableNoteModel = JSON.parse(serializedNote);
-  const data: SerializableNoteMetadataModel = JSON.parse(enote.data);
+  const data: SerializableNoteMetadataModel = JSON.parse(
+    enote.data || '{"tags": []}'
+  );
   return {
     id: enote.id,
     owner: enote.owner,

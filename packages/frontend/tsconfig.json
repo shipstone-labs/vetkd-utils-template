@@ -1,11 +1,26 @@
 {
   "extends": "@tsconfig/svelte/tsconfig.json",
   "compilerOptions": {
-    "verbatimModuleSyntax": true,
+    "verbatimModuleSyntax": false,
     "importsNotUsedAsValues": "remove",
-    "sourceMap": true
+    "sourceMap": true,
+    "lib": ["es2022"],
     // other compiler options...
+    "jsx": "preserve",
+    "jsxFactory": "h",
+    "jsxFragmentFactory": "Fragment",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "strict": true,
+    "types": ["svelte"]
   },
-  "include": ["src/**/*", "wasm.d.ts", "node_modules/@shipstone-labs/*"],
+  "include": [
+    "src/**/*",
+    "wasm.d.ts",
+    "node_modules/@shipstone-labs/*",
+    "node_modules/**/*.svelte"
+  ],
   "exclude": ["node_modules/*", "__sapper__/*", "public/*"]
 }

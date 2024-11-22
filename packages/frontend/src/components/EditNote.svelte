@@ -33,7 +33,7 @@ let deleting = false;
 export let history: HistoryEntry[] = [];
 export let ownedByMe = true;
 
-function addHistory(e) {
+function addHistory(e: CustomEvent<HistoryEntry>) {
 	history = [...history, { ...e.detail }];
 }
 
@@ -58,6 +58,17 @@ async function save() {
 		})
 		.finally(() => {
 			updating = false;
+			addHistory(
+				new CustomEvent("history", {
+					detail: {
+						action: "updated",
+						user: selfPrincipalString(),
+						rule: [],
+						labels: [],
+						created_at: BigInt(Date.now() * 1000000),
+					},
+				}),
+			);
 		});
 
 	addNotification({ type: "success", message: "IP Doc saved successfully" });
