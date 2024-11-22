@@ -4,7 +4,7 @@
     "verbatimModuleSyntax": false,
     "importsNotUsedAsValues": "remove",
     "sourceMap": true,
-    "lib": ["es2022"],
+    "lib": ["es2022", "dom"],
     // other compiler options...
     "jsx": "preserve",
     "jsxFactory": "h",

@@ -228,13 +228,13 @@ impl EncryptedNote {
             return false;
         }
         let user_name = user.clone().unwrap_or_else(|| EVERYONE.to_string());
-        self.history.push(HistoryEntry {
+        self.history.append(&mut vec![HistoryEntry {
             action: "share".to_string(),
             labels: vec![],
             user: user_name.clone(),
             rule: Some((user_name.clone(), when)),
             created_at: ic_cdk::api::time(),
-        });
+        }]);
         self.users.insert(
             user_name,
             PrincipalRule {
@@ -389,6 +389,9 @@ pub async fn symmetric_key_verification_key_for_note() -> String {
     hex::encode(response.public_key)
 }
 
+// Be careful this routine will not be able to actully determine whether the
+// current user is permitted to read the note. I.e. anyone can ask for any
+// derivation path.
 pub async fn encrypted_symmetric_key_for_note(
     note_id: NoteId,
     owner: &String,

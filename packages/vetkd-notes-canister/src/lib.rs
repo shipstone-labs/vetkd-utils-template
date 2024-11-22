@@ -114,6 +114,19 @@ fn whoami() -> String {
 /// All the functions of this canister's public API should be available only to
 /// registered users, with the exception of [whoami].
 
+#[update]
+fn refresh_note(note_id: NoteId) -> EncryptedNote {
+    let note = NOTES.with_borrow(|notes| {
+        notes
+            .get(&note_id)
+            .unwrap_or_else(|| ic_cdk::trap("note not found"))
+    });
+    if !note.is_authorized() {
+        ic_cdk::trap("unauthorized refresh");
+    }
+    note
+}
+
 /// Returns (a future of) this [caller]'s notes.
 /// Panics:
 ///     [caller] is the anonymous identity
