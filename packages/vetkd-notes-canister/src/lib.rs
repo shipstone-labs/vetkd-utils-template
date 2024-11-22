@@ -423,7 +423,10 @@ async fn encrypted_symmetric_key_for_note(
                 key_id: bls12_381_test_key_1(),
                 encryption_public_key,
             };
-            notes.insert(note_id, note);
+            notes.insert(note_id, note.clone());
+            ic_cdk::println!(
+                "update note with ID {note_id} as {note:#?} retrieving from {user_str}"
+            );
             result
         } else {
             ic_cdk::trap(&format!("note with ID {note_id} does not exist"));

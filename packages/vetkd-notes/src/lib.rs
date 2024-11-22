@@ -1,4 +1,5 @@
 use candid::{CandidType, Decode, Deserialize, Encode, Principal};
+use custom_debug::Debug;
 use ic_stable_structures::{storable::Bound, Storable};
 use std::{
     borrow::Cow,
@@ -54,6 +55,7 @@ impl HistoryEntry {
 #[derive(Clone, Debug, CandidType, Deserialize, Eq, PartialEq)]
 pub struct EncryptedNote {
     id: NoteId,
+    #[debug(skip)]
     encrypted_text: String,
     data: String,
     owner: String,
@@ -160,6 +162,8 @@ impl EncryptedNote {
     pub fn lock_authorized(&mut self) -> bool {
         let user = &caller().to_text();
         if user == &self.owner {
+            let id = self.id;
+            ic_cdk::println!("note not locked with ID {id} as {self:#?} retrieving owner {user}");
             return true;
         }
         // once a non-owner reads a note it's locked and can no longer
@@ -182,6 +186,10 @@ impl EncryptedNote {
                 }
                 self.locked = true;
                 self.read_by.insert(user.to_string());
+
+                let id = self.id;
+                ic_cdk::println!("locked note with ID {id} as {self:#?} retrieving from {user}");
+
                 return true;
             }
         } else if let Some(r) = self.users.get_mut(EVERYONE) {
@@ -202,6 +210,12 @@ impl EncryptedNote {
                 }
                 self.read_by.insert(user.to_string());
                 self.locked = true;
+
+                let id = self.id;
+                ic_cdk::println!(
+                    "locked note with ID {id} as {self:#?} retrieving from {user} as everyone"
+                );
+
                 return true;
             }
         }
