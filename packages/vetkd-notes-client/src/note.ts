@@ -1,4 +1,4 @@
-import { BackendActor } from "./actor.js";
+import type { BackendActor } from "./actor.js";
 import type { EncryptedNote, PrincipalRule, HistoryEntry } from "./backend.js";
 import type { CryptoService } from "./crypto.js";
 import type { Principal } from "@dfinity/principal";

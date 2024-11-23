@@ -14,17 +14,23 @@ const dispatch = createEventDispatcher<{
 }>();
 
 function add() {
+  if (disabled) {
+    return;
+  }
 	dispatch("add", newTag);
 	newTag = "";
 	newTagInput.focus();
 }
 
 function remove(tag: string) {
-	dispatch("remove", tag);
+  if (disabled) {
+    return;
+  }
+  dispatch("remove", tag);
 }
 
-function onKeyPress(e) {
-	if (e.key === "Enter" && newTag.trim().length > 0 && !tags.includes(newTag)) {
+function onKeyPress(e: KeyboardEvent) {
+	if (e.key === "Enter" && newTag.trim().length > 0 && !tags.includes(newTag) && !disabled) {
 		add();
 	}
 }
@@ -34,10 +40,11 @@ function onKeyPress(e) {
   {#each tags as tag}
     <button
       class="btn btn-outline btn-sm flex items-center"
+      disabled={disabled}
       on:click={() => remove(tag)}
     >
       <span>{tag}</span>
-      <svg
+      {#if !disabled}<svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
@@ -49,10 +56,10 @@ function onKeyPress(e) {
           stroke-width="2"
           d="M6 18L18 6M6 6l12 12"
         />
-      </svg>
+      </svg>{/if}
     </button>
   {/each}
-  <input
+  {#if !disabled}<input
     bind:value={newTag}
     placeholder="Add tag..."
     class="bg-transparent  text-base  rounded-lg h-8 px-3 w-32 {disabled
@@ -67,5 +74,5 @@ function onKeyPress(e) {
     on:click={add}
     disabled={newTag.trim().length === 0 || tags.includes(newTag) || disabled}
     >Add</button
-  >
+  >{/if}
 </div>

@@ -1,5 +1,5 @@
 <script lang="ts">
-import type { NoteModel } from "../lib/note";
+import type { NoteModel } from "@shipstone-labs/vetkd-notes-client";
 import { auth } from "../store/auth";
 import { addUser, refreshNotes, removeUser } from "../store/notes";
 import { addNotification, showError } from "../store/notifications";
@@ -24,7 +24,7 @@ let newWhenInput: HTMLInputElement;
 let adding = false;
 let removing = false;
 
-function dateValue(input: string): bigint {
+function dateValue(input: string): bigint | null {
 	if (!input) {
 		return null;
 	}
@@ -33,6 +33,11 @@ function dateValue(input: string): bigint {
 }
 
 async function add() {
+  if (!$auth.actor 
+    || !$auth.crypto
+  ) {
+    throw new Error("Not authenticated");
+  }
 	adding = true;
 	try {
 		await addUser(
@@ -45,19 +50,20 @@ async function add() {
 			type: "success",
 			message: "User successfully added",
 		});
+    const value = dateValue(newWhenValue)
 		editedNote.users = [
-			...editedNote.users.filter((u) => u.name !== newSharing),
-			{ name: newSharing, when: dateValue(newWhenValue) },
+			...editedNote.users.filter((u) => u[0] !== (newSharing || "everyone")),
+			[newSharing, {when: value ?[value]:[], was_read: false }]
 		];
 		const when = newWhenChecked
 			? null
-			: Number(dateValue(newWhenValue) / BigInt(1000000));
+			: value ? Number(value / BigInt(1000000)) : null;
 		dispatch("message", {
 			action: "share",
 			user: newSharingChecked ? null : newSharing || "everyone",
 			rule: newSharingChecked
-				? [["everyone", newWhenChecked ? [newWhenValue] : []]]
-				: [[newSharing, newWhenChecked ? [newWhenValue] : []]],
+				? ["everyone", {when: newWhenChecked && value ? [value] : [], was_read: false}]
+				: [newSharing, {when: newWhenChecked && value ? [value] : [], was_read: false}],
 			created_at: BigInt(Date.now()) * BigInt(1000000),
 		});
 		newSharing = "";
@@ -75,10 +81,15 @@ async function add() {
 }
 
 async function remove(sharing: string) {
+  if (!$auth.actor 
+    || !$auth.crypto
+  ) {
+    throw new Error("Not authenticated");
+  }
 	removing = true;
 	try {
 		await removeUser(editedNote.id, sharing, $auth.actor);
-		editedNote.users = editedNote.users.filter((u) => u.name !== sharing);
+		editedNote.users = editedNote.users.filter((u) => (u[0] || "everyone") !== (sharing || "everyone"));
 		addNotification({
 			type: "success",
 			message: "User successfully removed",
@@ -97,18 +108,6 @@ async function remove(sharing: string) {
 	await refreshNotes($auth.actor, $auth.crypto).catch((e) =>
 		showError(e, "Could not refresh notes."),
 	);
-}
-
-function onKeyPress(e) {
-	if (
-		e.key === "Enter" &&
-		newSharing.trim().length > 0 &&
-		!editedNote.users.find(
-			(e) => e.name === newSharing && e.when === dateValue(newWhenValue),
-		)
-	) {
-		add();
-	}
 }
 </script>
 
@@ -133,16 +132,18 @@ function onKeyPress(e) {
         <button
           class="btn btn-outline btn-sm flex flex-row items-center gap-2 space-2"
           on:click={() => {
-            remove(sharing.name);
+            if (!sharing[1]?.was_read) {
+              remove(sharing[0]);
+            }
           }}
-          disabled={adding || removing || !ownedByMe}
+          disabled={adding || removing || !ownedByMe || sharing[1]?.was_read}
         >
-          <span><b>Who:</b> {sharing.name || "everyone"}</span>
-          <span><b>When:</b> {sharing.when ? (new Date(Number(sharing.when / BigInt(1000000)))).toLocaleString() : "always"}</span>
-          <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <span><b>Who:</b> {sharing[0] || "everyone"}</span>
+          <span><b>When:</b> {sharing[1]?.when[0] ? (new Date(Number(sharing[1].when[0] / BigInt(1000000)))).toLocaleString() : "always"}</span>
+          {#if !sharing[1]?.was_read}<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <line x1="3" y1="3" x2="21" y2="21" stroke="currentColor" stroke-width="2"/>
               <line x1="3" y1="21" x2="21" y2="3" stroke="currentColor" stroke-width="2"/>
-          </svg>
+          </svg>{/if}
         </button>
       </div>
     {/each}
@@ -163,7 +164,6 @@ function onKeyPress(e) {
           : ''} 
           {!ownedByMe || newSharingChecked ? 'hidden' : ''}"
         bind:this={newSharingInput}
-        on:keypress={onKeyPress}
         disabled={adding}
       />
       <label class="inline-flex items-center mx-3 font-normal {!ownedByMe ? 'hidden' : ''}">
@@ -183,7 +183,6 @@ function onKeyPress(e) {
           : ''} 
           {!ownedByMe || newWhenChecked ? 'hidden' : ''}"
         bind:this={newWhenInput}
-        on:keypress={onKeyPress}
         disabled={adding || newWhenChecked}
       />
       <button
@@ -191,8 +190,7 @@ function onKeyPress(e) {
           {!ownedByMe ? 'hidden' : ''}
           {adding || removing ? 'loading' : ''}"
         on:click={add}
-        disabled={(newSharingChecked ? false : newSharing.trim().length === 0) ||
-          editedNote.users.find((u) => newSharingChecked ? u.name === null : u.name === newSharing && u.when === dateValue(newWhenValue)) != null ||
+        disabled={editedNote.users.find((u) => (u[0] || "everyone") === (newSharing || "everyone")) != null ||
           adding ||
           removing}
         >{adding ? 'Adding...' : removing ? 'Removing... ' : 'Add'}</button
