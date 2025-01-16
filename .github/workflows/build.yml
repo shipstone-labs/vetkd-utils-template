@@ -11,6 +11,9 @@ concurrency:
   group: compile-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  id-token: write
+
 jobs:
   build:
     name: build
@@ -76,5 +79,4 @@ jobs:
           path: docs
 
       - name: Deploy to GitHub Pages
-        id: deployment
         uses: actions/deploy-pages@v4
