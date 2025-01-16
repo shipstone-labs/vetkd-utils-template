@@ -5,19 +5,11 @@
   <strong>This is a client module which combines the required <a href="https://github.com/rustwasm/wasm-pack">wasm-pack</a> required for vetkd usage and a specific client for the ic-vetkd-notes api inside of a canister.</strong>
 </div>
 
-### 🎁 Publish to NPM with `wasm-pack publish`
+### Docs
 
-```
-wasm-pack publish
-```
-
-## 🔋 Batteries Included
-
-* [`wasm-bindgen`](https://github.com/rustwasm/wasm-bindgen) for communicating
-  between WebAssembly and JavaScript.
-* [`console_error_panic_hook`](https://github.com/rustwasm/console_error_panic_hook)
-  for logging panic messages to the developer console.
-* `LICENSE-APACHE` and `LICENSE-MIT`: most Rust projects are licensed this way, so these are included for you
+[NPM Docs](https://shipstone-labs.github.io/vetkd-utils/ic-vetkd-notes-client)
+[Rust Docs](https://shipstone-labs.github.io/vetkd-utils/ic-vetkd-notes)
+[Docs](https://shipstone-labs.github.io/vetkd-utils)
 
 ## License
 
