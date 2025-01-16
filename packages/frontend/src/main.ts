@@ -1,6 +1,6 @@
 import App from "./App.svelte";
-import vetkd_init from "@shipstone-labs/vetkd-notes-client";
-import vetkd_wasm from "@shipstone-labs/vetkd-notes-client/dist/vetkd_notes_client_bg.wasm";
+import vetkd_init from "@shipstone-labs/ic-vetkd-notes-client";
+import vetkd_wasm from "@shipstone-labs/ic-vetkd-notes-client/dist/vetkd_notes_client_bg.wasm";
 
 const init = async () => {
   // Once the wasm is initialized in this way, i.e., with the defaultExport of the respective .js file,

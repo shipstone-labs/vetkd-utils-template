@@ -4,7 +4,7 @@ import {
   createActor,
   CryptoService,
   sleep,
-} from "@shipstone-labs/vetkd-notes-client";
+} from "@shipstone-labs/ic-vetkd-notes-client";
 import { AuthClient } from "@dfinity/auth-client";
 import { addNotification, showError } from "./notifications";
 import type { JsonnableDelegationChain } from "@dfinity/identity/lib/cjs/identity/delegation";

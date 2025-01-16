@@ -1,7 +1,7 @@
 {
   "name": "vetkd-notes-canister",
   "depenencies": {
-    "@shipstone-labs/vetkd-notes-client": "workspace:*",
+    "@shipstone-labs/ic-vetkd-notes-client": "workspace:*",
     "vetkd-notes": "workspace:*"
   },
   "scripts": {

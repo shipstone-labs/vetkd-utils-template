@@ -6,7 +6,7 @@ import {
 	extractTitle,
 	type HistoryEntry,
 	type NoteModel,
-} from "@shipstone-labs/vetkd-notes-client";
+} from "@shipstone-labs/ic-vetkd-notes-client";
 import {
 	notesStore,
 	refreshNotes,

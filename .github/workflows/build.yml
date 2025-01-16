@@ -54,18 +54,19 @@ jobs:
         run: cargo clean --doc
       
       - name: Build docs
-        run: cargo doc --no-deps --package ic-vetkd-notes
-      
-      - name: Add redirect
-        run: echo '<meta http-equiv="refresh" content="0;url=ic_vetkd_notes/index.html">' > target/wasm32-unknown-unknown/doc/index.html
+        run: pnpm doc
       
       - name: Cargo publish
+        if: false
         run: cargo publish --token ${{ secrets.CARGO_TOKEN }} --package ic-vetkd-notes
-        
-      - name: Remove lock file
-        run: rm target/doc/.lock
-      
+
+      - name: NPM publish
+        if: false
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: pnpm publish --access public --filter "@shipstone-labs/ic-vetkd-notes"
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: target/wasm32-unknown-unknown/doc
+          path: docs

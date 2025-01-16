@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Documentation Hub</title>
+    <style>
+      /* General reset */
+      body {
+        margin: 0;
+        font-family: "Fira Sans", Arial, sans-serif;
+        line-height: 1.6;
+        background-color: #282c34;
+        color: #abb2bf;
+      }
+
+      /* Header style */
+      header {
+        background-color: #21252b;
+        padding: 1rem;
+        text-align: center;
+        border-bottom: 3px solid #61afef;
+      }
+
+      header h1 {
+        margin: 0;
+        font-size: 2rem;
+        color: #61afef;
+      }
+
+      header p {
+        margin: 0.5rem 0 0;
+        font-size: 1rem;
+        color: #98c379;
+      }
+
+      /* Links container */
+      .links {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 2rem;
+      }
+
+      /* Button style for links */
+      .link-button {
+        display: block;
+        margin: 1rem;
+        padding: 1rem 2rem;
+        font-size: 1.2rem;
+        font-weight: bold;
+        text-align: center;
+        text-decoration: none;
+        color: #282c34;
+        background-color: #61afef;
+        border-radius: 8px;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+      }
+
+      .link-button:hover {
+        background-color: #56a6e0;
+        transform: scale(1.05);
+      }
+
+      .link-button:active {
+        transform: scale(0.98);
+      }
+
+      /* Footer style */
+      footer {
+        text-align: center;
+        padding: 1rem;
+        font-size: 0.9rem;
+        color: #5c6370;
+        border-top: 1px solid #3e4451;
+        margin-top: 2rem;
+      }
+
+      footer a {
+        color: #61afef;
+        text-decoration: none;
+      }
+
+      footer a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Shipstone Labs ic-vetkd-notes Documentation Hub</h1>
+      <p>Select the documentation you need</p>
+    </header>
+    <main>
+      <div class="links">
+        <a href="/ic_vetkd_notes_client" class="link-button"
+          >@shipstone-labs/ic-vetkd-notes-client Module (Typedoc)</a
+        >
+        <a href="/ic_vetkd_notes" class="link-button"
+          >ic-vetkd-notes Crate (Rustdoc)</a
+        >
+      </div>
+    </main>
+    <footer>
+      <p>
+        Powered by <a href="https://www.rust-lang.org/">Rust</a>,
+        <a href="https://www.typescriptlang.org/">TypeScript</a>,
+        <a href="https://internetcomputer.org/">Internet Computer</a>, and
+        VetKeys
+      </p>
+    </footer>
+  </body>
+</html>

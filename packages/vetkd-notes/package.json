@@ -2,6 +2,7 @@
   "name": "shipstone-labs-ic-vetkd-notes",
   "scripts": {
     "build": "cargo build",
-    "build:release": "cargo build --release"
+    "build:release": "cargo build --release",
+    "doc": "mkdir -p ../../docs && rm -rf ../../docs/ && cargo doc --no-deps --document-private-items && cp -r ../../target/wasm32-unknown-unknown/doc/ ../../docs/"
   }
 }

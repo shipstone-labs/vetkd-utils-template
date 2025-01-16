@@ -19,10 +19,10 @@
         "target/**/release/**"
       ]
     },
-    "@shipstone-labs/vetkd-notes-client:build": {
+    "@shipstone-labs/ic-vetkd-notes-client:build": {
       "dependsOn": ["^vetkd-notes-canister:build"]
     },
-    "@shipstone-labs/vetkd-notes-client:build:release": {
+    "@shipstone-labs/ic-vetkd-notes-client:build:release": {
       "dependsOn": ["^vetkd-notes-canister:build:release"]
     },
     "lint": {
@@ -34,6 +34,12 @@
     "dev": {
       "cache": false,
       "persistent": true
+    },
+    "doc": {
+      "cache": false
+    },
+    "shipstone-labs-ic-vetkd-notes:doc": {
+      "dependsOn": ["^doc"]
     }
   }
 }

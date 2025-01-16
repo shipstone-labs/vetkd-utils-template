@@ -3,6 +3,10 @@
 name = "ic-vetkd-notes"
 version = "0.1.0"
 edition = "2021"
+description = "ic vetkd notes implementation to be used inside of a canister"
+license = "MIT"
+repository = "https://github.com/yourusername/ic-vetkd-notes"
+documentation = "https://shipstone-labs.github.io/vetkd-notes"
 exclude = [ "package.json", "node_modules", ".turbo", "turbo.json" ]
 
 [dependencies]

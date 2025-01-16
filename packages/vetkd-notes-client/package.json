@@ -1,5 +1,5 @@
 {
-  "name": "@shipstone-labs/vetkd-notes-client",
+  "name": "@shipstone-labs/ic-vetkd-notes-client",
   "type": "module",
   "collaborators": [
     "Andreas Richter <708186+richtera@users.noreply.github.com>"
@@ -34,7 +34,8 @@
   },
   "scripts": {
     "build": "wasm-pack build --target web && rm pkg/README.md pkg/.gitignore pkg/LICENSE pkg/package.json && mv pkg/* src/ && rm -rf pkg && tsup && mv src/*.wasm* dist/",
-    "build:release": "wasm-pack build --target web --release && rm pkg/README.md pkg/.gitignore pkg/LICENSE pkg/package.json && mv pkg/* src/ && rm -rf pkg && tsup && mv src/*.wasm* dist/"
+    "build:release": "wasm-pack build --target web --release && rm pkg/README.md pkg/.gitignore pkg/LICENSE pkg/package.json && mv pkg/* src/ && rm -rf pkg && tsup && mv src/*.wasm* dist/",
+    "doc": "mkdir -p ../../docs && rm -rf ../../docs/ic_vetkd_notes_client && typedoc --out ../../docs/ic_vetkd_notes_client src/index.ts"
   },
   "dependencies": {
     "@dfinity/agent": "^0.15.7",
