@@ -45,3 +45,27 @@ jobs:
     
       - name: 🏗️ Build
         run: pnpm build:release
+
+      - name: Setup pages
+        id: pages
+        uses: actions/configure-pages@v5
+      
+      - name: Clean docs folder
+        run: cargo clean --doc
+      
+      - name: Build docs
+        run: cargo doc --no-deps --package ic-vetkd-notes
+      
+      - name: Add redirect
+        run: echo '<meta http-equiv="refresh" content="0;url=ic_vetkd_notes/index.html">' > target/wasm32-unknown-unknown/doc/index.html
+      
+      - name: Cargo publish
+        run: cargo publish --token ${{ secrets.CARGO_TOKEN }} --package ic-vetkd-notes
+        
+      - name: Remove lock file
+        run: rm target/doc/.lock
+      
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: target/wasm32-unknown-unknown/doc

@@ -4,10 +4,10 @@ use ic_stable_structures::memory_manager::{MemoryId, MemoryManager, VirtualMemor
 use ic_stable_structures::{
     storable::Bound, DefaultMemoryImpl, StableBTreeMap, StableCell, Storable,
 };
+use ic_vetkd_notes::{vetkd_system_api_canister_id, EncryptedNote, NoteId, EVERYONE};
 use std::borrow::Cow;
 use std::cell::RefCell;
 use std::collections::HashMap;
-use vetkd_notes::{vetkd_system_api_canister_id, EncryptedNote, NoteId, EVERYONE};
 
 type Memory = VirtualMemory<DefaultMemoryImpl>;
 

@@ -1,6 +1,6 @@
 
 [package]
-name = "vetkd-notes"
+name = "ic-vetkd-notes"
 version = "0.1.0"
 edition = "2021"
 exclude = [ "package.json", "node_modules", ".turbo", "turbo.json" ]
