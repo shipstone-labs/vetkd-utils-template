@@ -63,7 +63,9 @@ jobs:
         run: cargo clean --doc
       
       - name: Build docs
-        run: pnpm doc
+        run: |
+          pnpm doc
+          find docs
       
       - name: Cargo publish
         if: false

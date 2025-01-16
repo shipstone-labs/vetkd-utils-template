@@ -3,6 +3,6 @@
   "scripts": {
     "build": "cargo build",
     "build:release": "cargo build --release",
-    "doc": "mkdir -p ../../docs && rm -rf ../../docs/ && cargo doc --no-deps --document-private-items && cp -r ../../target/wasm32-unknown-unknown/doc/ ../../docs/"
+    "doc": "cargo doc --no-deps --document-private-items && cp -r ../../target/wasm32-unknown-unknown/doc/ ../../docs/"
   }
 }
