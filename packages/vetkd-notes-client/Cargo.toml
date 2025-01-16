@@ -24,8 +24,8 @@ rand_chacha = { workspace = true }
 sha2 = { workspace = true }
 sha3 = { workspace = true }
 subtle = { workspace = true }
-wasm-bindgen = { version = "0.2.84", optional = true }
-wasm-bindgen-test = "0.3.45"
+wasm-bindgen = { version = "0.2.100", optional = true }
+wasm-bindgen-test = "0.3.50"
 zeroize = { workspace = true }
 
 [dev-dependencies]
