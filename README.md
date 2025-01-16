@@ -64,7 +64,7 @@ This example uses an **insecure** implementation of [the proposed vetKD system A
 For **Motoko** deployment use:
 
 ```sh
-export BUILD_ENV=motoko
+export BUILD_ENV=rust
 ```
 
 ### Step 2: To generate `$BUILD_ENV`-specific files run:

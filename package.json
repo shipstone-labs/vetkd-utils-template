@@ -10,7 +10,8 @@
     "build:release": "cross-env NODE_ENV=production turbo build:release",
     "watch": "cargo watch --why --ignore packages/wasm-client/tsup.config.bundled* --ignore packages/wasm-client/pkg --ignore packages/wasm-client/dist -x 'build' -s 'cd packages/wasm-client && wasm-pack build && mv pkg/wasm_client.js pkg/wasm_client.mjs && pnpm tsup'",
     "prune": "turbo prune",
-    "clean": "turbo prune && rm -rf node_modules"
+    "clean": "turbo prune && rm -rf node_modules",
+    "publish": "dotenv run turbo publish"
   },
   "keywords": [],
   "author": "",
