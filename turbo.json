@@ -38,8 +38,8 @@
     "doc": {
       "cache": false
     },
-    "publish": {
-      "dependsOn": ["build:release", "^publish"]
+    "deploy": {
+      "dependsOn": ["^build:release", "^deploy"]
     },
     "shipstone-labs-ic-vetkd-notes:doc": {
       "dependsOn": ["^doc"]

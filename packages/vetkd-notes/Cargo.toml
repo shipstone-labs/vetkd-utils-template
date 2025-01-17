@@ -8,6 +8,7 @@ license = "MIT"
 repository = "https://github.com/shipstone-labs/vetkd-utils"
 documentation = "https://shipstone-labs.github.io/vetkd-utils/ic_vetkd_notes"
 exclude = [ "package.json", "node_modules", ".turbo", "turbo.json" ]
+wasm-opt = false
 
 [dependencies]
 candid = "0.10.12"

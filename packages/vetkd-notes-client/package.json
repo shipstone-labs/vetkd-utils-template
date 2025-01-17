@@ -5,7 +5,7 @@
     "Andreas Richter <708186+richtera@users.noreply.github.com>"
   ],
   "description": "vetkey client library",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -36,7 +36,7 @@
     "build": "wasm-pack build --target web && rm pkg/README.md pkg/.gitignore pkg/LICENSE pkg/package.json && mv pkg/* src/ && rm -rf pkg && tsup && mv src/*.wasm* dist/",
     "build:release": "wasm-pack build --target web --release && rm pkg/README.md pkg/.gitignore pkg/LICENSE pkg/package.json && mv pkg/* src/ && rm -rf pkg && tsup && mv src/*.wasm* dist/",
     "doc": "typedoc --out ../../docs/ic_vetkd_notes_client src/index.ts",
-    "publish": "wasm-pack publish"
+    "deploy": "npm publish --access public"
   },
   "dependencies": {
     "@dfinity/agent": "^0.15.7",
