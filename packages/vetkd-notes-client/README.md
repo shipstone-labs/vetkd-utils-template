@@ -7,8 +7,8 @@
 
 ### Docs
 
-[NPM Docs](https://shipstone-labs.github.io/vetkd-utils/ic-vetkd-notes-client)
-[Rust Docs](https://shipstone-labs.github.io/vetkd-utils/ic-vetkd-notes)
+[NPM Docs](https://shipstone-labs.github.io/vetkd-utils/ic_vetkd_notes_client)
+[Rust Docs](https://shipstone-labs.github.io/vetkd-utils/ic_vetkd_notes)
 [Docs](https://shipstone-labs.github.io/vetkd-utils)
 
 ## License
