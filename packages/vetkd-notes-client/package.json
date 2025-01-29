@@ -39,7 +39,7 @@
     "deploy": "npm publish --access public"
   },
   "dependencies": {
-    "@dfinity/agent": "^0.15.7",
+    "@dfinity/agent": "^2.2.0",
     "idb-keyval": "6.2.1"
   }
 }

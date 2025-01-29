@@ -8,7 +8,7 @@ import { addNotification, showError } from "../store/notifications";
 import Header from "./Header.svelte";
 import NoteEditor from "./NoteEditor.svelte";
 import TagEditor from "./TagEditor.svelte";
-import { noteFromContent } from "@shipstone-labs/vetkd-notes-client";
+import { noteFromContent } from "@shipstone-labs/ic-vetkd-notes-client";
 
 let creating = false;
 let tags: string[] = $draft.tags;
