@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.2](https://github.com/shipstone-labs/vetkd-utils/compare/ic-vetkd-notes-v0.1.1...ic-vetkd-notes-v0.1.2) (2025-01-30)
+
+
+### Bug Fixes
+
+* I just can't get it to bump initially ([907a0c8](https://github.com/shipstone-labs/vetkd-utils/commit/907a0c8bb1c5f66376d71a6f1070fba8c26c5cf1))
+
 ## [0.1.1](https://github.com/shipstone-labs/vetkd-utils/compare/ic-vetkd-notes-v0.1.1...ic-vetkd-notes-v0.1.1) (2025-01-30)
 
 
