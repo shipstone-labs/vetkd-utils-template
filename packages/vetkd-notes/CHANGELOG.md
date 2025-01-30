@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.7](https://github.com/shipstone-labs/vetkd-utils/compare/ic-vetkd-notes-v0.1.6...ic-vetkd-notes-v0.1.7) (2025-01-30)
+
+
+### Bug Fixes
+
+* More upgrades ([0df3089](https://github.com/shipstone-labs/vetkd-utils/commit/0df3089461c3b4ddc5712907f08a90b79be21188))
+
 ## [0.1.6](https://github.com/shipstone-labs/vetkd-utils/compare/ic-vetkd-notes-v0.1.5...ic-vetkd-notes-v0.1.6) (2025-01-30)
 
 
