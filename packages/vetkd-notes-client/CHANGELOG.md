@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.6](https://github.com/shipstone-labs/vetkd-utils/compare/ic-vetkd-notes-client-v0.1.5...ic-vetkd-notes-client-v0.1.6) (2025-01-30)
+
+
+### Bug Fixes
+
+* Something is preventing the final condition from working. ([6be7d48](https://github.com/shipstone-labs/vetkd-utils/commit/6be7d48166fbb1e655c73f0fe4ffebda37f946ce))
+
 ## [0.1.5](https://github.com/shipstone-labs/vetkd-utils/compare/ic-vetkd-notes-client-v0.1.4...ic-vetkd-notes-client-v0.1.5) (2025-01-30)
 
 
