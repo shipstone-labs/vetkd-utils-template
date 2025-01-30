@@ -1,13 +1,13 @@
 {
   "packages": {
-    "packages/ic-vetkd-notes": {
+    "packages/vetkd-notes": {
       "release-type": "rust",
       "package-name": "ic-vetkd-notes",
       "component": "ic-vetkd-notes",
       "include-component-in-tag": true,
       "release-as": "0.1.0"
     },
-    "packages/ic-vetkd-notes-client": {
+    "packages/vetkd-notes-client": {
       "release-type": "node",
       "package-name": "@shipstone-labs/ic-vetkd-notes-client",
       "component": "ic-vetkd-notes-client",
