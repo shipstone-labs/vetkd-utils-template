@@ -72,26 +72,26 @@ jobs:
       
       - name: Build docs
         run: |
-          echo "${{ steps.release-please.outputs.releases_json }}"
+          echo "${{ toJSON(steps.release-please.outputs.releases_json) }}"
           pnpm doc
           find docs
       
       - name: Cargo publish
-        if: ${{ steps.release-please.outputs.releases_json && fromJson(steps.release-please.outputs.releases_json)['packages/vetkd-notes'].release_created }}
+        if: ${{ steps.release-please.outputs['packages/vetkd-notes--release_created'] }}
         run: cargo publish --token ${{ secrets.CARGO_TOKEN }} --package ic-vetkd-notes
 
       - name: NPM publish
-        if: ${{ steps.release-please.outputs.releases_json && fromJson(steps.release-please.outputs.releases_json)['packages/vetkd-notes-client'].release_created }}
+        if: ${{ steps.release-please.outputs['packages/vetkd-notes-client--release_created'] }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: pnpm publish --access public --filter "@shipstone-labs/ic-vetkd-notes"
 
       - name: Upload artifact
-        if: ${{ steps.release-please.outputs.releases_json }}
+        if: ${{ steps.release-please.outputs.releases_created }}
         uses: actions/upload-pages-artifact@v3
         with:
           path: docs
 
       - name: Deploy to GitHub Pages
-        if: ${{ steps.release-please.outputs.releases_json }}
+        if: ${{ steps.release-please.outputs.releases_created }}
         uses: actions/deploy-pages@v4
