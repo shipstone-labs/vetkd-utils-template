@@ -3,8 +3,6 @@
 resolver = "2"
 members = [
     "packages/vetkd-notes-canister",
-    "packages/vetkd-notes",
-    "packages/vetkd-notes-client"
 ]
 
 [workspace.package]
