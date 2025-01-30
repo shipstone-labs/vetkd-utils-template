@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.6](https://github.com/shipstone-labs/vetkd-utils/compare/ic-vetkd-notes-v0.1.5...ic-vetkd-notes-v0.1.6) (2025-01-30)
+
+
+### Bug Fixes
+
+* Now it should work. ([9547785](https://github.com/shipstone-labs/vetkd-utils/commit/9547785f1832665f72e9332bc29e140db1e4beb0))
+
 ## [0.1.5](https://github.com/shipstone-labs/vetkd-utils/compare/ic-vetkd-notes-v0.1.4...ic-vetkd-notes-v0.1.5) (2025-01-30)
 
 
