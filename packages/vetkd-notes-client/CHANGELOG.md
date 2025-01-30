@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.9](https://github.com/shipstone-labs/vetkd-utils/compare/ic-vetkd-notes-client-v0.1.8...ic-vetkd-notes-client-v0.1.9) (2025-01-30)
+
+
+### Bug Fixes
+
+* Bump ([9e635ac](https://github.com/shipstone-labs/vetkd-utils/commit/9e635ace9fdd5216e0316fe0a3b9f13265aac3fb))
+
 ## [0.1.8](https://github.com/shipstone-labs/vetkd-utils/compare/ic-vetkd-notes-client-v0.1.7...ic-vetkd-notes-client-v0.1.8) (2025-01-30)
 
 
