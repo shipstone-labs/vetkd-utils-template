@@ -85,7 +85,9 @@ jobs:
         if: ${{ steps.release-please.outputs['packages/vetkd-notes-client--release_created'] }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
-        run: pnpm publish --access public --filter "@shipstone-labs/ic-vetkd-notes-client" --no-git-checks
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ./.npmrc
+          pnpm publish --access public --filter "@shipstone-labs/ic-vetkd-notes-client" --no-git-checks
 
       - name: Upload artifact
         if: ${{ steps.release-please.outputs.releases_created }}
