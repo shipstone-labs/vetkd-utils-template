@@ -72,7 +72,6 @@ jobs:
       
       - name: Build docs
         run: |
-          echo "${{ toJSON(steps.release-please.outputs.releases_json) }}"
           pnpm doc
           find docs
       
@@ -86,7 +85,7 @@ jobs:
         if: ${{ steps.release-please.outputs['packages/vetkd-notes-client--release_created'] }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
-        run: pnpm publish --access public --filter "@shipstone-labs/ic-vetkd-notes"
+        run: pnpm publish --access public --filter "@shipstone-labs/ic-vetkd-notes-client"
 
       - name: Upload artifact
         if: ${{ steps.release-please.outputs.releases_created }}
