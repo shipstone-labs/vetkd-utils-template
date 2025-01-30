@@ -24,6 +24,13 @@ jobs:
       - name: 📥 Checkout
         uses: actions/checkout@v4
 
+      - name: 🚀 Run release-please
+        uses: google-github-actions/release-please-action@v4
+        id: release-please
+        with:
+          config-file: .github/release-please-config.json # ✅ Explicitly specify the config file
+          manifest-file: .github/release-please-manifest.json
+      
       - name: 🏗️ Setup rust
         uses: actions-rust-lang/setup-rust-toolchain@v1
         with:
@@ -68,11 +75,11 @@ jobs:
           find docs
       
       - name: Cargo publish
-        if: false
+        if: ${{ steps.release-please.outputs.releases_json && fromJson(steps.release-please.outputs.releases_json)['packages/ic-vetkd-notes'].release_created }}
         run: cargo publish --token ${{ secrets.CARGO_TOKEN }} --package ic-vetkd-notes
 
       - name: NPM publish
-        if: false
+        if: ${{ steps.release-please.outputs.releases_json && fromJson(steps.release-please.outputs.releases_json)['packages/ic-vetkd-notes-client'].release_created }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: pnpm publish --access public --filter "@shipstone-labs/ic-vetkd-notes"
