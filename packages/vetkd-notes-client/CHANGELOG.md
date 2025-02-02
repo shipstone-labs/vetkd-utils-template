@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.13](https://github.com/shipstone-labs/vetkd-utils/compare/ic-vetkd-notes-client-v0.1.12...ic-vetkd-notes-client-v0.1.13) (2025-02-02)
+
+
+### Bug Fixes
+
+* Repair and bump ([dcde467](https://github.com/shipstone-labs/vetkd-utils/commit/dcde467a5d794b87fa1e7c12a2945f555b0a04fa))
+
 ## [0.1.12](https://github.com/shipstone-labs/vetkd-utils/compare/ic-vetkd-notes-client-v0.1.11...ic-vetkd-notes-client-v0.1.12) (2025-02-02)
 
 
