@@ -1,0 +1,32 @@
+type EncryptedNote = record {
+  id : nat;
+  read_by : vec text;
+  updated_at : nat64;
+  encrypted_text : text;
+  owner : text;
+  data : text;
+  locked : bool;
+  history : vec HistoryEntry;
+  created_at : nat64;
+  users : vec record { text; PrincipalRule };
+};
+type HistoryEntry = record {
+  action : text;
+  labels : vec text;
+  rule : opt record { text; opt nat64 };
+  user : text;
+  created_at : nat64;
+};
+type PrincipalRule = record { when : opt nat64; was_read : bool };
+service : {
+  add_user : (nat, opt text, opt nat64) -> ();
+  create_note : () -> (nat);
+  delete_note : (nat) -> ();
+  encrypted_symmetric_key_for_note : (nat, blob) -> (text);
+  get_notes : () -> (vec EncryptedNote);
+  refresh_note : (nat) -> (EncryptedNote);
+  remove_user : (nat, opt text) -> ();
+  symmetric_key_verification_key_for_note : () -> (text);
+  update_note : (nat, text, text) -> ();
+  whoami : () -> (text);
+}

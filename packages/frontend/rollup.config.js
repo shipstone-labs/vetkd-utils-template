@@ -10,6 +10,7 @@ import inject from "rollup-plugin-inject";
 import json from "@rollup/plugin-json";
 import injectProcessEnv from "rollup-plugin-inject-process-env";
 import { wasm } from "@rollup/plugin-wasm";
+import replace from "@rollup/plugin-replace";
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -123,6 +124,12 @@ export default (config) => {
       //   ],
       // }),
 
+      replace({
+        preventAssignment: true,
+        values: {
+          global: "globalThis", // ✅ Replaces global with globalThis
+        },
+      }),
       // If you have external dependencies installed from
       // npm, you'll most likely need these plugins. In
       // some cases you'll need additional configuration -

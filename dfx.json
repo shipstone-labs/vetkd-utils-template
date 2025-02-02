@@ -1,15 +1,16 @@
 {
   "canisters": {
     "vetkd_system_api": {
-      "candid": "vetkd_system_api.did",
+      "candid": "chainkey_testing_canister.did",
       "type": "custom",
-      "wasm": "vetkd_system_api.wasm"
+      "wasm": "chainkey_testing_canister.wasm"
     },
     "vetkd_notes": {
       "dependencies": ["vetkd_system_api"],
       "type": "rust",
       "candid": "packages/vetkd-notes-canister/vetkd_notes_canister.did",
-      "package": "vetkd-notes-canister"
+      "package": "vetkd-notes-canister",
+      "postgenerate": "mkdir -p packages/vetkd-notes-client/src/declarations && cp -r src/declarations/* packages/vetkd-notes-client/src/declarations/"
     },
     "vetkd_www": {
       "dependencies": ["vetkd_notes", "vetkd_system_api"],

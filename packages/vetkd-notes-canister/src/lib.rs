@@ -391,8 +391,8 @@ fn remove_user(note_id: NoteId, user: Option<String>) {
 mod vetkd_types;
 
 use vetkd_types::{
-    VetKDCurve, VetKDEncryptedKeyReply, VetKDEncryptedKeyRequest, VetKDKeyId, VetKDPublicKeyReply,
-    VetKDPublicKeyRequest,
+    VetKDCurve, VetKDDeriveEncryptedKeyRequest, VetKDEncryptedKeyReply, VetKDKeyId,
+    VetKDPublicKeyReply, VetKDPublicKeyRequest,
 };
 
 #[update]
@@ -425,14 +425,14 @@ async fn encrypted_symmetric_key_for_note(
             if !note.lock_authorized() {
                 ic_cdk::trap(&format!("unauthorized key request by user {user_str}"));
             }
-            let result = VetKDEncryptedKeyRequest {
+            let result = VetKDDeriveEncryptedKeyRequest {
                 derivation_id: {
                     let mut buf = vec![];
                     buf.extend_from_slice(&note_id.to_be_bytes()); // fixed-size encoding
                     buf.extend_from_slice(note.owner().as_bytes());
                     buf // prefix-free
                 },
-                public_key_derivation_path: vec![b"note_symmetric_key".to_vec()],
+                derivation_path: vec![b"note_symmetric_key".to_vec()],
                 key_id: bls12_381_test_key_1(),
                 encryption_public_key,
             };
@@ -448,19 +448,19 @@ async fn encrypted_symmetric_key_for_note(
 
     let (response,): (VetKDEncryptedKeyReply,) = ic_cdk::call(
         vetkd_system_api_canister_id(),
-        "vetkd_encrypted_key",
+        "vetkd_derive_encrypted_key",
         (request,),
     )
     .await
-    .expect("call to vetkd_encrypted_key failed");
+    .expect("call to vetkd_derive_encrypted_key failed");
 
     hex::encode(response.encrypted_key)
 }
 
 fn bls12_381_test_key_1() -> VetKDKeyId {
     VetKDKeyId {
-        curve: VetKDCurve::Bls12_381,
-        name: "test_key_1".to_string(),
+        curve: VetKDCurve::Bls12_381_G2,
+        name: "insecure_test_key_1".to_string(),
     }
 }
 

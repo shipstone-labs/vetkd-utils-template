@@ -10,6 +10,10 @@ import { addNotification, showError } from "./notifications";
 import type { JsonnableDelegationChain } from "@dfinity/identity/lib/cjs/identity/delegation";
 import { navigateTo } from "svelte-router-spa";
 
+// if (typeof global === "undefined") {
+//   var global = window; // ✅ Ensures `global` exists in browser
+// }
+
 export type AuthState =
   | {
       state: "initializing-auth";
@@ -104,6 +108,7 @@ export async function authenticate(client: AuthClient) {
   try {
     const actor = createActor({
       agentOptions: {
+        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         identity: client.getIdentity() as any,
       },
     });
@@ -125,7 +130,7 @@ export async function authenticate(client: AuthClient) {
   } catch (e) {
     auth.update(() => ({
       state: "error",
-      error: e.message || "An error occurred",
+      error: (e as Error).message || "An error occurred",
     }));
   }
 }
@@ -136,9 +141,12 @@ function handleSessionTimeout() {
   setTimeout(() => {
     try {
       const delegation = JSON.parse(
-        window.localStorage.getItem("ic-delegation")
+        window.localStorage.getItem("ic-delegation") || "null"
       ) as JsonnableDelegationChain;
 
+      if (!delegation) {
+        return;
+      }
       const expirationTimeMs =
         Number.parseInt(delegation.delegations[0].delegation.expiration, 16) /
         1000000;

@@ -411,11 +411,11 @@ pub async fn encrypted_symmetric_key_for_note(
 
     let (response,): (VetKDEncryptedKeyReply,) = ic_cdk::call(
         vetkd_system_api_canister_id(),
-        "vetkd_encrypted_key",
+        "vetkd_derive_encrypted_key",
         (request,),
     )
     .await
-    .expect("call to vetkd_encrypted_key failed");
+    .expect("call to vetkd_derive_encrypted_key failed");
 
     hex::encode(response.encrypted_key)
 }

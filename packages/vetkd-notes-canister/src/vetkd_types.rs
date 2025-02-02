@@ -4,13 +4,14 @@ use candid::Principal;
 
 pub type CanisterId = Principal;
 
-#[derive(CandidType, Deserialize)]
+#[derive(CandidType, Clone, Deserialize, Eq, PartialEq)]
 pub enum VetKDCurve {
-    #[serde(rename = "bls12_381")]
-    Bls12_381,
+    #[serde(rename = "bls12_381_g2")]
+    #[allow(non_camel_case_types)]
+    Bls12_381_G2,
 }
 
-#[derive(CandidType, Deserialize)]
+#[derive(CandidType, Clone, Deserialize, Eq, PartialEq)]
 pub struct VetKDKeyId {
     pub curve: VetKDCurve,
     pub name: String,
@@ -29,11 +30,11 @@ pub struct VetKDPublicKeyReply {
 }
 
 #[derive(CandidType, Deserialize)]
-pub struct VetKDEncryptedKeyRequest {
-    pub public_key_derivation_path: Vec<Vec<u8>>,
+pub struct VetKDDeriveEncryptedKeyRequest {
     pub derivation_id: Vec<u8>,
-    pub key_id: VetKDKeyId,
     pub encryption_public_key: Vec<u8>,
+    pub derivation_path: Vec<Vec<u8>>,
+    pub key_id: VetKDKeyId,
 }
 
 #[derive(CandidType, Deserialize)]
