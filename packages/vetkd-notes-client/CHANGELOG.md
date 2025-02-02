@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.12](https://github.com/shipstone-labs/vetkd-utils/compare/ic-vetkd-notes-client-v0.1.11...ic-vetkd-notes-client-v0.1.12) (2025-02-02)
+
+
+### Bug Fixes
+
+* Upgrade to latest chain_testing_container ([e0671d4](https://github.com/shipstone-labs/vetkd-utils/commit/e0671d4fd5b7d6816c94dcd14cb3dba5c53e58e5))
+
 ## [0.1.11](https://github.com/shipstone-labs/vetkd-utils/compare/ic-vetkd-notes-client-v0.1.10...ic-vetkd-notes-client-v0.1.11) (2025-01-30)
 
 
