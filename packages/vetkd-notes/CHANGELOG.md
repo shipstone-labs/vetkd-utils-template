@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.9](https://github.com/shipstone-labs/vetkd-utils/compare/ic-vetkd-notes-v0.1.8...ic-vetkd-notes-v0.1.9) (2025-02-02)
+
+
+### Bug Fixes
+
+* Also bump crate ([189ace8](https://github.com/shipstone-labs/vetkd-utils/commit/189ace839f9dce4adbf901235b5d9a253c621a56))
+
 ## [0.1.8](https://github.com/shipstone-labs/vetkd-utils/compare/ic-vetkd-notes-v0.1.7...ic-vetkd-notes-v0.1.8) (2025-02-02)
 
 
