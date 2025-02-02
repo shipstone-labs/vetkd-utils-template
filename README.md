@@ -103,7 +103,6 @@ If you have multiple `dfx` identities set up, ensure you are using the identity 
 :::
    1. To install and deploy a canister run:
       ```sh
-      cd examples/motoko/encrypted-files-dapp-vetkd
       dfx deploy internet_identity --argument '(null)'
       ```
    2. To print the Internet Identity URL, run:
