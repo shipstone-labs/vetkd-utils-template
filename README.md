@@ -159,3 +159,16 @@ If you have opened this page previously, please remove all local store data for 
 ## Troubleshooting
 
 If you run into issues, clearing all the application-specific IndexedDBs in the browser (which are used to store Internet Identity information and the derived non-extractable AES keys) might help fix the issue.
+
+## Highlevel Documentation
+
+```mermaid
+graph TD
+  frontend -->|get_notes, create_note, delete_note, add_user, encrypted_symmetric_key_for_note| backend("vetkd_notes")
+
+  backend -->|vetkd_derive_encrypted_key| system_api("vetkd_system_api")
+```
+
+## States
+
+Use createNote to create a new note owned by your principal. The resulting structure the creation of the note will at first create a low level note using create_note and then derive and download a vetkd to be able to update/encrypt the data and upload it to the backend canister. To make key management easier it will automatically always download and decrypt all documents the current principle has access to as of right now.
