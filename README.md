@@ -2,9 +2,14 @@
 keywords: [advanced, motoko, encrypted, encrypted notes, notes dapp, vetkeys, vetkd]
 ---
 
-# vetkd-utils
+# vetkd-utils-template
 
-This repo is a monorepo containing a Rust-based cargo crate, an NPM package and sample code (frontend and canister) to make it easier for other developers to use the pre-release version of ICP VetKeys without low-level coding.
+This repo is a streamlined starter template for integrating ICP VetKeys into your project. 
+
+This template demonstrates how to use the vetKD utilities from standard package repositories (crates.io and npmjs.com), making it easier for developers new to VetKeys to get started quickly. 
+Built as a simplified alternative to the original vetkd-utils monorepo, it focuses on ease of use and clear implementation patterns.
+
+The functionality that is demonstrated (the Mini IP Manager) is the same as the earlier repo.
 
 # Current deployments
 
